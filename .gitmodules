@@ -1,0 +1,3 @@
+[submodule "cupp"]
+	path = cupp
+	url = https://github.com/Mebus/cupp
