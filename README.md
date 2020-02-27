@@ -35,5 +35,5 @@ After all, the user could insert any password and if it is in the wordlist that 
 
  * Create a virtualenv in the project folder e.g., "venv".
  * Run `source venv/Scripts/activate`
- * Run `pip install requirements.txt`
+ * Run `pip install -r requirements.txt`
  * Run `python facebookApi.py`
