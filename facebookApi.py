@@ -6,4 +6,3 @@ URL = ("https://www.facebook.com/zuck")
 
 
 fs.scraping(URL)
-
