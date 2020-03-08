@@ -31,13 +31,19 @@ class facebook_scraping:
         page_name = table_favorites.find_all("div", {"class": "mediaPageName"})
 
         print(name)
+        profile["name"] = name.split(" ")[0]
+        profile["surname"] = name.split(" ")[1]
         print("\t\t Work")
         for i in range(0, len(work)):
             print(work[i].a.get_text())
+            profile["work"] = work[i].a.get_text()
         print("\t\t Study")
         for i in range(0, len(study)):
             print(study[i].a.get_text())
+            profile["study"] = study[i].a.get_text()
         print("\n\n\t\tWas born in: " + cities[1].a.get_text() + " - Living in: " + cities[0].a.get_text())
+        profile["hometown"] = cities[1].a.get_text()
+        profile["city"] = cities[0].a.get_text()
         for i in range(0, len(all_favorites)-1):
             titles.append(all_favorites[i].get_text())
             contents.append(page_name[i].get_text())
@@ -55,23 +61,24 @@ class facebook_scraping:
         for i in range(0, len(others_content_hidden)):
             favorites.append(others_content_hidden[i].get_text())
 
-        favorites.sort()
+        profile["words"] = favorites.sort()
 
         def my_range(start, end, step):
             while start <= end:
                 yield start
                 start += step
 
-        for i in range(0, len(favorites)):
-            if(i%2 == 0):
-                if((i+1 < len(favorites))):
-                    print('{0:50}  {1}'.format(favorites[i], favorites[i+1]))
+        # for i in range(0, len(favorites)):
+        #     if(i%2 == 0):
+        #         if((i+1 < len(favorites))):
+        #             print('{0:50}  {1}'.format(favorites[i], favorites[i+1]))
 
-        profile["name"] = name[0].split(" ")
-        profile["surename"] = name[1].split(" ")
-        profile["work"] = work
-        profile["study"] = study
-        profile["favorites"] = favorites
+        profile["words"] = favorites
+
+        print("Name: " + profile["name"])
+        print("Surname: " + profile["surname"])
+        print("Work: " + profile["work"])
+        print("Study: " + profile["study"])
 
         return profile
 
