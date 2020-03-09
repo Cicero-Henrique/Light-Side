@@ -16,11 +16,12 @@ __version__ = "3.2.5-alpha"
 
 CONFIG = {}
 
+
 class cupp:
 
     def read_config(self, filename):
-        """Read the given configuration file and update global variables to reflect
-        changes (CONFIG)."""
+        """Read the given configuration file and update global variables to
+        reflect changes (CONFIG)."""
 
         if os.path.isfile(filename):
 
@@ -42,8 +43,8 @@ class cupp:
                 "dicturl": config.get("downloader", "dicturl"),
             }
 
-            # 1337 mode configs, well you can add more lines if you add it to the
-            # config file too.
+            # 1337 mode configs, well you can add more lines if you add it to
+            # the config file too.
             leet = functools.partial(config.get, "leet")
             leetc = {}
             letters = {"a", "i", "e", "t", "o", "s", "g", "z"}
@@ -73,13 +74,11 @@ class cupp:
             for num in range(start, stop):
                 yield mystr + str(num)
 
-
     # for sorting and making combinations...
     def komb(self, seq, start, special=""):
         for mystr in seq:
             for mystr1 in start:
                 yield mystr + special + mystr1
-
 
     def print_to_file(self, filename, unique_list_finished):
         f = open(filename, "w")
@@ -104,12 +103,12 @@ class cupp:
             + "\033[1;m and shoot! Good luck!"
         )
 
-
     def interactive(self, profile):
         """Implementation of the -i switch. Interactively question the user and
         create a password dictionary file based on the answer."""
 
-        print("\r\n[+] Insert the information about the victim to make a dictionary")
+        print(
+            "\r\n[+] Insert the information about the victim to make a dictionary")
         print("[+] If you don't know all the info, just hit enter when asked! ;)\r\n")
 
         # We need some information first!
@@ -154,15 +153,6 @@ class cupp:
         profile["company"] = input("> Company name: ").lower()
         print("\r\n")
 
-
-
-
-
-
-
-
-
-
         # Opening the file of likes
         # f = open("pages.txt", "r", encoding="utf-8")
         # likes_list = f.read().replace(" ", "")
@@ -172,18 +162,6 @@ class cupp:
 
         # profile["words"] = likes_list
 
-
-
-
-
-
-
-
-
-
-
-
-
         profile["spechars1"] = input(
             "> Do you want to add special chars at the end of words? Y/[N]: "
         ).lower()
@@ -191,10 +169,10 @@ class cupp:
         profile["randnum"] = input(
             "> Do you want to add some random numbers at the end of words? Y/[N]:"
         ).lower()
-        profile["leetmode"] = input("> Leet mode? (i.e. leet = 1337) Y/[N]: ").lower()
+        profile["leetmode"] = input(
+            "> Leet mode? (i.e. leet = 1337) Y/[N]: ").lower()
 
         self.generate_wordlist_from_profile(profile)  # generate the wordlist
-
 
     def generate_wordlist_from_profile(self, profile):
         """ Generates a wordlist from a given profile """
@@ -219,30 +197,6 @@ class cupp:
         # Now me must do some string modifications...
 
         # Birthdays first
-
-        birthdate_yy = profile["birthdate"][-2:]
-        birthdate_yyy = profile["birthdate"][-3:]
-        birthdate_yyyy = profile["birthdate"][-4:]
-        birthdate_xd = profile["birthdate"][1:2]
-        birthdate_xm = profile["birthdate"][3:4]
-        birthdate_dd = profile["birthdate"][:2]
-        birthdate_mm = profile["birthdate"][2:4]
-
-        wifeb_yy = profile["wifeb"][-2:]
-        wifeb_yyy = profile["wifeb"][-3:]
-        wifeb_yyyy = profile["wifeb"][-4:]
-        wifeb_xd = profile["wifeb"][1:2]
-        wifeb_xm = profile["wifeb"][3:4]
-        wifeb_dd = profile["wifeb"][:2]
-        wifeb_mm = profile["wifeb"][2:4]
-
-        kidb_yy = profile["kidb"][-2:]
-        kidb_yyy = profile["kidb"][-3:]
-        kidb_yyyy = profile["kidb"][-4:]
-        kidb_xd = profile["kidb"][1:2]
-        kidb_xm = profile["kidb"][3:4]
-        kidb_dd = profile["kidb"][:2]
-        kidb_mm = profile["kidb"][2:4]
 
         # Convert first letters to uppercase...
 
@@ -285,18 +239,19 @@ class cupp:
         rev_n = [rev_name, rev_nameup, rev_nick, rev_nickup]
         rev_w = [rev_wife, rev_wifeup]
         rev_k = [rev_kid, rev_kidup]
-        # Let's do some serious work! This will be a mess of code, but... who cares? :)
+        # Let's do some serious work! This will be a mess of code, but...
+        # who cares? :)
 
         # Birthdays combinations
 
         bds = [
-            birthdate_yy,
-            birthdate_yyy,
-            birthdate_yyyy,
-            birthdate_xd,
-            birthdate_xm,
-            birthdate_dd,
-            birthdate_mm,
+            profile["birthdate"][-2:],
+            profile["birthdate"][-3:],
+            profile["birthdate"][-4:],
+            profile["birthdate"][1:2],
+            profile["birthdate"][3:4],
+            profile["birthdate"][:2],
+            profile["birthdate"][2:4]
         ]
 
         bdss = []
@@ -314,8 +269,17 @@ class cupp:
                         ):
                             bdss.append(bds1 + bds2 + bds3)
 
-                    # For a woman...
-        wbds = [wifeb_yy, wifeb_yyy, wifeb_yyyy, wifeb_xd, wifeb_xm, wifeb_dd, wifeb_mm]
+        # For a woman...
+
+        wbds = [
+            profile["wifeb"][-2:],
+            profile["wifeb"][-3:],
+            profile["wifeb"][-4:],
+            profile["wifeb"][1:2],
+            profile["wifeb"][3:4],
+            profile["wifeb"][:2],
+            profile["wifeb"][2:4]
+        ]
 
         wbdss = []
 
@@ -332,8 +296,17 @@ class cupp:
                         ):
                             wbdss.append(wbds1 + wbds2 + wbds3)
 
-                    # and a child...
-        kbds = [kidb_yy, kidb_yyy, kidb_yyyy, kidb_xd, kidb_xm, kidb_dd, kidb_mm]
+        # and a child...
+
+        kbds = [
+            profile["kidb"][-2:],
+            profile["kidb"][-3:],
+            profile["kidb"][-4:],
+            profile["kidb"][1:2],
+            profile["kidb"][3:4],
+            profile["kidb"][:2],
+            profile["kidb"][2:4]
+        ]
 
         kbdss = []
 
@@ -542,7 +515,8 @@ class cupp:
 
     def __init__(self, profile):
         # self.__profile = profile
-        self.read_config(os.path.join(os.path.dirname(os.path.realpath(__file__)), "cupp.cfg"))
+        self.read_config(os.path.join(os.path.dirname(
+            os.path.realpath(__file__)), "cupp.cfg"))
         self.interactive(profile)
 
     @property
