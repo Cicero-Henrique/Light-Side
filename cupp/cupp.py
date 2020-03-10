@@ -174,6 +174,35 @@ class cupp:
 
         self.generate_wordlist_from_profile(profile)  # generate the wordlist
 
+    def rip_birth(self, date):
+        birthday_slices = [
+            date[-2:],
+            date[-3:],
+            date[-4:],
+            date[1:2],
+            date[3:4],
+            date[:2],
+            date[2:4]
+        ]
+        return birthday_slices
+
+    def birthday_combinations(self, birthday_slices):
+        birthday_comb = []
+        for aux1 in birthday_slices:
+            birthday_comb.append(aux1)
+            for aux2 in birthday_slices:
+                if birthday_slices.index(aux1) != birthday_slices.index(aux2):
+                    birthday_comb.append(aux1 + aux2)
+                    for aux3 in birthday_slices:
+                        if (
+                            birthday_slices.index(aux1) != birthday_slices.index(aux2)
+                            and birthday_slices.index(aux2) != birthday_slices.index(aux3)
+                            and birthday_slices.index(aux1) != birthday_slices.index(aux3)
+                        ):
+                            birthday_comb.append(aux1 + aux2 + aux3)
+
+        return birthday_comb
+
     def generate_wordlist_from_profile(self, profile):
         """ Generates a wordlist from a given profile """
 
@@ -200,14 +229,14 @@ class cupp:
 
         # Convert first letters to uppercase...
 
-        nameup = profile["name"].title()
+        nameup =    profile["name"].title()
         surnameup = profile["surname"].title()
-        nickup = profile["nick"].title()
-        wifeup = profile["wife"].title()
-        wifenup = profile["wifen"].title()
-        kidup = profile["kid"].title()
-        kidnup = profile["kidn"].title()
-        petup = profile["pet"].title()
+        nickup =    profile["nick"].title()
+        wifeup =    profile["wife"].title()
+        wifenup =   profile["wifen"].title()
+        kidup =     profile["kid"].title()
+        kidnup =    profile["kidn"].title()
+        petup =     profile["pet"].title()
         companyup = profile["company"].title()
 
         wordsup = []
@@ -244,86 +273,20 @@ class cupp:
 
         # Birthdays combinations
 
-        bds = [
-            profile["birthdate"][-2:],
-            profile["birthdate"][-3:],
-            profile["birthdate"][-4:],
-            profile["birthdate"][1:2],
-            profile["birthdate"][3:4],
-            profile["birthdate"][:2],
-            profile["birthdate"][2:4]
-        ]
-
-        bdss = []
-
-        for bds1 in bds:
-            bdss.append(bds1)
-            for bds2 in bds:
-                if bds.index(bds1) != bds.index(bds2):
-                    bdss.append(bds1 + bds2)
-                    for bds3 in bds:
-                        if (
-                            bds.index(bds1) != bds.index(bds2)
-                            and bds.index(bds2) != bds.index(bds3)
-                            and bds.index(bds1) != bds.index(bds3)
-                        ):
-                            bdss.append(bds1 + bds2 + bds3)
+        birth_slices = self.rip_birth(profile["birthdate"])
+        birthday_comb = self.birthday_combinations(birth_slices)
 
         # For a woman...
 
-        wbds = [
-            profile["wifeb"][-2:],
-            profile["wifeb"][-3:],
-            profile["wifeb"][-4:],
-            profile["wifeb"][1:2],
-            profile["wifeb"][3:4],
-            profile["wifeb"][:2],
-            profile["wifeb"][2:4]
-        ]
-
-        wbdss = []
-
-        for wbds1 in wbds:
-            wbdss.append(wbds1)
-            for wbds2 in wbds:
-                if wbds.index(wbds1) != wbds.index(wbds2):
-                    wbdss.append(wbds1 + wbds2)
-                    for wbds3 in wbds:
-                        if (
-                            wbds.index(wbds1) != wbds.index(wbds2)
-                            and wbds.index(wbds2) != wbds.index(wbds3)
-                            and wbds.index(wbds1) != wbds.index(wbds3)
-                        ):
-                            wbdss.append(wbds1 + wbds2 + wbds3)
+        wife_birth_slices = self.rip_birth(profile["wifeb"])
+        wife_birthday_comb = self.birthday_combinations(wife_birth_slices)
 
         # and a child...
 
-        kbds = [
-            profile["kidb"][-2:],
-            profile["kidb"][-3:],
-            profile["kidb"][-4:],
-            profile["kidb"][1:2],
-            profile["kidb"][3:4],
-            profile["kidb"][:2],
-            profile["kidb"][2:4]
-        ]
+        kid_birth_slices = self.rip_birth(profile["kidb"])
+        kid_birthday_comb = self.birthday_combinations(kid_birth_slices)
 
-        kbdss = []
-
-        for kbds1 in kbds:
-            kbdss.append(kbds1)
-            for kbds2 in kbds:
-                if kbds.index(kbds1) != kbds.index(kbds2):
-                    kbdss.append(kbds1 + kbds2)
-                    for kbds3 in kbds:
-                        if (
-                            kbds.index(kbds1) != kbds.index(kbds2)
-                            and kbds.index(kbds2) != kbds.index(kbds3)
-                            and kbds.index(kbds1) != kbds.index(kbds3)
-                        ):
-                            kbdss.append(kbds1 + kbds2 + kbds3)
-
-                    # string combinations....
+        # string combinations....
 
         kombinaac = [profile["pet"], petup, profile["company"], companyup]
 
@@ -382,12 +345,12 @@ class cupp:
                     kombinaak.append(kombina1 + kombina2)
 
         kombi = {}
-        kombi[1] = list(self.komb(kombinaa, bdss))
-        kombi[1] += list(self.komb(kombinaa, bdss, "_"))
-        kombi[2] = list(self.komb(kombinaaw, wbdss))
-        kombi[2] += list(self.komb(kombinaaw, wbdss, "_"))
-        kombi[3] = list(self.komb(kombinaak, kbdss))
-        kombi[3] += list(self.komb(kombinaak, kbdss, "_"))
+        kombi[1] = list(self.komb(kombinaa, birthday_comb))
+        kombi[1] += list(self.komb(kombinaa, birthday_comb, "_"))
+        kombi[2] = list(self.komb(kombinaaw, wife_birthday_comb))
+        kombi[2] += list(self.komb(kombinaaw, wife_birthday_comb, "_"))
+        kombi[3] = list(self.komb(kombinaak, kid_birthday_comb))
+        kombi[3] += list(self.komb(kombinaak, kid_birthday_comb, "_"))
         kombi[4] = list(self.komb(kombinaa, years))
         kombi[4] += list(self.komb(kombinaa, years, "_"))
         kombi[5] = list(self.komb(kombinaac, years))
@@ -396,12 +359,12 @@ class cupp:
         kombi[6] += list(self.komb(kombinaaw, years, "_"))
         kombi[7] = list(self.komb(kombinaak, years))
         kombi[7] += list(self.komb(kombinaak, years, "_"))
-        kombi[8] = list(self.komb(word, bdss))
-        kombi[8] += list(self.komb(word, bdss, "_"))
-        kombi[9] = list(self.komb(word, wbdss))
-        kombi[9] += list(self.komb(word, wbdss, "_"))
-        kombi[10] = list(self.komb(word, kbdss))
-        kombi[10] += list(self.komb(word, kbdss, "_"))
+        kombi[8] = list(self.komb(word, birthday_comb))
+        kombi[8] += list(self.komb(word, birthday_comb, "_"))
+        kombi[9] = list(self.komb(word, wife_birthday_comb))
+        kombi[9] += list(self.komb(word, wife_birthday_comb, "_"))
+        kombi[10] = list(self.komb(word, kid_birthday_comb))
+        kombi[10] += list(self.komb(word, kid_birthday_comb, "_"))
         kombi[11] = list(self.komb(word, years))
         kombi[11] += list(self.komb(word, years, "_"))
         kombi[12] = [""]
@@ -419,12 +382,12 @@ class cupp:
             kombi[21] = list(self.concats(reverse, numfrom, numto))
         kombi[17] = list(self.komb(reverse, years))
         kombi[17] += list(self.komb(reverse, years, "_"))
-        kombi[18] = list(self.komb(rev_w, wbdss))
-        kombi[18] += list(self.komb(rev_w, wbdss, "_"))
-        kombi[19] = list(self.komb(rev_k, kbdss))
-        kombi[19] += list(self.komb(rev_k, kbdss, "_"))
-        kombi[20] = list(self.komb(rev_n, bdss))
-        kombi[20] += list(self.komb(rev_n, bdss, "_"))
+        kombi[18] = list(self.komb(rev_w, wife_birthday_comb))
+        kombi[18] += list(self.komb(rev_w, wife_birthday_comb, "_"))
+        kombi[19] = list(self.komb(rev_k, kid_birthday_comb))
+        kombi[19] += list(self.komb(rev_k, kid_birthday_comb, "_"))
+        kombi[20] = list(self.komb(rev_n, birthday_comb))
+        kombi[20] += list(self.komb(rev_n, birthday_comb, "_"))
         komb001 = [""]
         komb002 = [""]
         komb003 = [""]
@@ -458,9 +421,9 @@ class cupp:
         komb_unique012 = list(dict.fromkeys(komb006).keys())
 
         uniqlist = (
-            bdss
-            + wbdss
-            + kbdss
+            birthday_comb
+            + wife_birthday_comb
+            + kid_birthday_comb
             + reverse
             + komb_unique01
             + komb_unique02
