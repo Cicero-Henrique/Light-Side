@@ -10,7 +10,7 @@ The objective of this project is to validate the user passwords and alert him if
 
 # Scraping
 
-First of all the user should insert the URL of his Facebook profile. The Validator will make a web scraping in this link, looking for and list any public info useful as names, address, graduation, movies, sports, etc. To do the scraping the Validator need some libraries, are them:
+First of all the user should insert the URL of his Facebook profile. The Validator will make a web scraping in this link, looking for and list any public info useful as names, address, graduation, movies, sports, etc. To do the scraping the Validator need some libraries, they are:
 
 * mechanize
 * requests
@@ -23,7 +23,7 @@ The list of preferences can be used in the tool [Cupp](https://github.com/Mebus/
 
 # Validating
 
-After all, the user could insert any password and if it is in the wordlist that isn't a good password.
+In the end, the user could insert any password and if it is in the wordlist that isn't a good password.
 
 # Requirements
 
