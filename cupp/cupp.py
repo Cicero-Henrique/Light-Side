@@ -203,6 +203,17 @@ class cupp:
 
         return birthday_comb
 
+    def reduce_kombina(self, kombina, array):
+        for kombina1 in kombina:
+                    array.append(kombina1)
+                    for kombina2 in kombina:
+                        if kombina.index(kombina1) != kombina.index(kombina2) and kombina.index(
+                            kombina1.title()
+                        ) != kombina.index(kombina2.title()):
+                            array.append(kombina1 + kombina2)
+
+        return array
+
     def generate_wordlist_from_profile(self, profile):
         """ Generates a wordlist from a given profile """
 
@@ -318,31 +329,13 @@ class cupp:
         ]
 
         kombinaa = []
-        for kombina1 in kombina:
-            kombinaa.append(kombina1)
-            for kombina2 in kombina:
-                if kombina.index(kombina1) != kombina.index(kombina2) and kombina.index(
-                    kombina1.title()
-                ) != kombina.index(kombina2.title()):
-                    kombinaa.append(kombina1 + kombina2)
+        kombinaa = self.reduce_kombina(kombina, kombinaa)
 
         kombinaaw = []
-        for kombina1 in kombinaw:
-            kombinaaw.append(kombina1)
-            for kombina2 in kombinaw:
-                if kombinaw.index(kombina1) != kombinaw.index(kombina2) and kombinaw.index(
-                    kombina1.title()
-                ) != kombinaw.index(kombina2.title()):
-                    kombinaaw.append(kombina1 + kombina2)
+        kombinaaw = self.reduce_kombina(kombinaw, kombinaaw)
 
         kombinaak = []
-        for kombina1 in kombinak:
-            kombinaak.append(kombina1)
-            for kombina2 in kombinak:
-                if kombinak.index(kombina1) != kombinak.index(kombina2) and kombinak.index(
-                    kombina1.title()
-                ) != kombinak.index(kombina2.title()):
-                    kombinaak.append(kombina1 + kombina2)
+        kombinaak = self.reduce_kombina(kombinak, kombinaak)
 
         kombi = {}
         kombi[1] = list(self.komb(kombinaa, birthday_comb))
