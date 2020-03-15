@@ -214,6 +214,11 @@ class cupp:
 
         return array
 
+    def generate_combinations_array(self, array, birthday):
+        new_combinations = list(self.komb(array, birthday))
+        new_combinations += list(self.komb(array, birthday))
+        return new_combinations
+
     def generate_wordlist_from_profile(self, profile):
         """ Generates a wordlist from a given profile """
 
@@ -338,49 +343,34 @@ class cupp:
         kombinaak = self.reduce_kombina(kombinak, kombinaak)
 
         kombi = {}
-        kombi[1] = list(self.komb(kombinaa, birthday_comb))
-        kombi[1] += list(self.komb(kombinaa, birthday_comb, "_"))
-        kombi[2] = list(self.komb(kombinaaw, wife_birthday_comb))
-        kombi[2] += list(self.komb(kombinaaw, wife_birthday_comb, "_"))
-        kombi[3] = list(self.komb(kombinaak, kid_birthday_comb))
-        kombi[3] += list(self.komb(kombinaak, kid_birthday_comb, "_"))
-        kombi[4] = list(self.komb(kombinaa, years))
-        kombi[4] += list(self.komb(kombinaa, years, "_"))
-        kombi[5] = list(self.komb(kombinaac, years))
-        kombi[5] += list(self.komb(kombinaac, years, "_"))
-        kombi[6] = list(self.komb(kombinaaw, years))
-        kombi[6] += list(self.komb(kombinaaw, years, "_"))
-        kombi[7] = list(self.komb(kombinaak, years))
-        kombi[7] += list(self.komb(kombinaak, years, "_"))
-        kombi[8] = list(self.komb(word, birthday_comb))
-        kombi[8] += list(self.komb(word, birthday_comb, "_"))
-        kombi[9] = list(self.komb(word, wife_birthday_comb))
-        kombi[9] += list(self.komb(word, wife_birthday_comb, "_"))
-        kombi[10] = list(self.komb(word, kid_birthday_comb))
-        kombi[10] += list(self.komb(word, kid_birthday_comb, "_"))
-        kombi[11] = list(self.komb(word, years))
-        kombi[11] += list(self.komb(word, years, "_"))
-        kombi[12] = [""]
-        kombi[13] = [""]
-        kombi[14] = [""]
-        kombi[15] = [""]
-        kombi[16] = [""]
-        kombi[21] = [""]
+
+        kombi[0] = self.generate_combinations_array(kombinaa, birthday_comb)
+        kombi[1] = self.generate_combinations_array(kombinaaw, wife_birthday_comb)
+        kombi[2] = self.generate_combinations_array(kombinaak, kid_birthday_comb)
+
+        kombi[3] = self.generate_combinations_array(kombinaa, years)
+        kombi[4] = self.generate_combinations_array(kombinaac, years)
+        kombi[5] = self.generate_combinations_array(kombinaaw, years)
+        kombi[6] = self.generate_combinations_array(kombinaak, years)
+
+        kombi[7] = self.generate_combinations_array(word, birthday_comb)
+        kombi[8] = self.generate_combinations_array(word, wife_birthday_comb)
+        kombi[9] = self.generate_combinations_array(word, kid_birthday_comb)
+        kombi[10] =  self.generate_combinations_array(word, years)
+
+        kombi[11] =  self.generate_combinations_array(reverse, years)
+        kombi[12] =  self.generate_combinations_array(rev_w, wife_birthday_comb)
+        kombi[13] =  self.generate_combinations_array(rev_k, kid_birthday_comb)
+        kombi[14] =  self.generate_combinations_array(rev_n, birthday_comb)
+
         if profile["randnum"] == "y":
-            kombi[12] = list(self.concats(word, numfrom, numto))
-            kombi[13] = list(self.concats(kombinaa, numfrom, numto))
-            kombi[14] = list(self.concats(kombinaac, numfrom, numto))
-            kombi[15] = list(self.concats(kombinaaw, numfrom, numto))
-            kombi[16] = list(self.concats(kombinaak, numfrom, numto))
-            kombi[21] = list(self.concats(reverse, numfrom, numto))
-        kombi[17] = list(self.komb(reverse, years))
-        kombi[17] += list(self.komb(reverse, years, "_"))
-        kombi[18] = list(self.komb(rev_w, wife_birthday_comb))
-        kombi[18] += list(self.komb(rev_w, wife_birthday_comb, "_"))
-        kombi[19] = list(self.komb(rev_k, kid_birthday_comb))
-        kombi[19] += list(self.komb(rev_k, kid_birthday_comb, "_"))
-        kombi[20] = list(self.komb(rev_n, birthday_comb))
-        kombi[20] += list(self.komb(rev_n, birthday_comb, "_"))
+            kombi[15] = list(self.concats(word, numfrom, numto))
+            kombi[16] = list(self.concats(kombinaa, numfrom, numto))
+            kombi[17] = list(self.concats(kombinaac, numfrom, numto))
+            kombi[18] = list(self.concats(kombinaaw, numfrom, numto))
+            kombi[19] = list(self.concats(kombinaak, numfrom, numto))
+            kombi[20] = list(self.concats(reverse, numfrom, numto))
+
         komb001 = [""]
         komb002 = [""]
         komb003 = [""]
@@ -398,7 +388,7 @@ class cupp:
         print("[+] Sorting list and removing duplicates...")
 
         komb_unique = {}
-        for i in range(1, 22):
+        for i in range(0, len(kombi)):
             komb_unique[i] = list(dict.fromkeys(kombi[i]).keys())
 
         komb_unique01 = list(dict.fromkeys(kombinaa).keys())
@@ -439,11 +429,7 @@ class cupp:
         unique_lista = list(dict.fromkeys(uniqlist).keys())
         unique_leet = []
         if profile["leetmode"] == "y":
-            for (
-                x
-            ) in (
-                unique_lista
-            ):  # if you want to add more leet chars, you will need to add more lines in cupp.cfg too...
+            for (x) in (unique_lista):  # if you want to add more leet chars, you will need to add more lines in cupp.cfg too...
 
                 x = self.make_leet(x)  # convert to leet
                 unique_leet.append(x)
