@@ -1,3 +1,6 @@
 [submodule "cupp"]
 	path = cupp
 	url = https://github.com/Mebus/cupp
+[submodule "SDK"]
+	path = SDK
+	url = https://github.com/Cicero-Henrique/SDK
