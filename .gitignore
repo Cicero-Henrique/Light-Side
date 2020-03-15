@@ -138,3 +138,10 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Others unnecessaries directories
+SDK/Go
+SDK/HTML
+SKD/PHP
+.saz
+.pdf
