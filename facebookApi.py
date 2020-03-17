@@ -7,4 +7,6 @@ URL = ("https://www.facebook.com/zuck")
 profile = fs.scraping(URL)
 cupp(profile)
 
+email = input("Insert your email: ")
+
 

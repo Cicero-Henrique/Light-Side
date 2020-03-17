@@ -1,6 +1,0 @@
-*.pyc
-*.txt
-*.gz
-.vscode/
-dictionaries/
-.coverage
