@@ -10,10 +10,6 @@ import urllib.error
 import urllib.parse
 import urllib.request
 
-__author__ = "Muris Kurgas"
-__license__ = "GPL"
-__version__ = "3.2.5-alpha"
-
 CONFIG = {}
 
 
@@ -104,32 +100,15 @@ class cupp:
         )
 
     def interactive(self, profile):
-        """Implementation of the -i switch. Interactively question the user and
-        create a password dictionary file based on the answer."""
-
-        print(
-            "\r\n[+] Insert the information about the victim to make a dictionary")
+        print("\r\n[+] Insert the information about the victim to make a dictionary")
         print("[+] If you don't know all the info, just hit enter when asked! ;)\r\n")
 
-        # We need some information first!
-
-        # profile = {}
-
-        # name = input("> First Name: ").lower()
-        # while len(name) == 0 or name == " " or name == "  " or name == "   ":
-        #     print("\r\n[-] You must enter a name at least!")
-        #     name = input("> Name: ").lower()
-        # profile["name"] = str(name)
-
-        # profile["surname"] = input("> Surname: ").lower()
         profile["nick"] = input("> Nickname: ").lower()
         birthdate = input("> Birthdate (DDMMYYYY): ")
         while len(birthdate) != 0 and len(birthdate) != 8:
             print("\r\n[-] You must enter 8 digits for birthday!")
             birthdate = input("> Birthdate (DDMMYYYY): ")
         profile["birthdate"] = str(birthdate)
-
-        # print("\r\n")
 
         profile["wife"] = input("> Partners) name: ").lower()
         profile["wifen"] = input("> Partners) nickname: ").lower()
@@ -153,28 +132,27 @@ class cupp:
         profile["company"] = input("> Company name: ").lower()
         print("\r\n")
 
-        # Opening the file of likes
-        # f = open("pages.txt", "r", encoding="utf-8")
-        # likes_list = f.read().replace(" ", "")
-        # f.close()
-        # likes_list = likes_list.split("\n")
-        # #likes_list = likes_list.replace(" ", "")
+        answer = input("> Do you want to add special chars at the end of words? Y/[N]: ").lower()
+        if(answer == 'y'):
+            profile["spechars1"] = True
+        else:
+            profile["spechars1"] = False
 
-        # profile["words"] = likes_list
+        answer = input("> Do you want to add some random numbers at the end of words? Y/[N]:").lower()
+        if(answer == 'y'):
+            profile["randnum"] = True
+        else:
+            profile["randnum"] = False
 
-        profile["spechars1"] = input(
-            "> Do you want to add special chars at the end of words? Y/[N]: "
-        ).lower()
-
-        profile["randnum"] = input(
-            "> Do you want to add some random numbers at the end of words? Y/[N]:"
-        ).lower()
-        profile["leetmode"] = input(
-            "> Leet mode? (i.e. leet = 1337) Y/[N]: ").lower()
+        answer = input("> Leet mode? (i.e. leet = 1337) Y/[N]: ").lower()
+        if(answer == 'y'):
+            profile["leetmode"] = True
+        else:
+            profile["leetmode"] = False
 
         self.generate_wordlist_from_profile(profile)  # generate the wordlist
 
-    def rip_birth(self, date):
+    def rip_birthday(self, date):
         birthday_slices = [
             date[-2:],
             date[-3:],
@@ -203,16 +181,17 @@ class cupp:
 
         return birthday_comb
 
-    def reduce_kombina(self, kombina, array):
-        for kombina1 in kombina:
-                    array.append(kombina1)
-                    for kombina2 in kombina:
-                        if kombina.index(kombina1) != kombina.index(kombina2) and kombina.index(
-                            kombina1.title()
-                        ) != kombina.index(kombina2.title()):
-                            array.append(kombina1 + kombina2)
+    def names_combinations(self, names):
+        combinations = []
+        for name in names:
+            combinations.append(name)
+            for kombina2 in names:
+                if names.index(name) != names.index(kombina2) and names.index(
+                    name.title()
+                ) != names.index(kombina2.title()):
+                    combinations.append(name + kombina2)
 
-        return array
+        return combinations
 
     def generate_combinations_array(self, array, birthday):
         new_combinations = list(self.komb(array, birthday))
@@ -229,7 +208,7 @@ class cupp:
 
         profile["spechars"] = []
 
-        if profile["spechars1"] == "y":
+        if profile["spechars1"] == True:
             for spec1 in chars:
                 profile["spechars"].append(spec1)
                 for spec2 in chars:
@@ -289,24 +268,24 @@ class cupp:
 
         # Birthdays combinations
 
-        birth_slices = self.rip_birth(profile["birthdate"])
+        birth_slices = self.rip_birthday(profile["birthdate"])
         birthday_comb = self.birthday_combinations(birth_slices)
 
         # For a woman...
 
-        wife_birth_slices = self.rip_birth(profile["wifeb"])
+        wife_birth_slices = self.rip_birthday(profile["wifeb"])
         wife_birthday_comb = self.birthday_combinations(wife_birth_slices)
 
         # and a child...
 
-        kid_birth_slices = self.rip_birth(profile["kidb"])
+        kid_birth_slices = self.rip_birthday(profile["kidb"])
         kid_birthday_comb = self.birthday_combinations(kid_birth_slices)
 
         # string combinations....
 
-        kombinaac = [profile["pet"], petup, profile["company"], companyup]
+        comb_pet_company = [profile["pet"], petup, profile["company"], companyup]
 
-        kombina = [
+        victim_names = [
             profile["name"],
             profile["surname"],
             profile["nick"],
@@ -315,7 +294,7 @@ class cupp:
             nickup,
         ]
 
-        kombinaw = [
+        wife_names = [
             profile["wife"],
             profile["wifen"],
             wifeup,
@@ -324,7 +303,7 @@ class cupp:
             surnameup,
         ]
 
-        kombinak = [
+        kid_names = [
             profile["kid"],
             profile["kidn"],
             kidup,
@@ -333,43 +312,40 @@ class cupp:
             surnameup,
         ]
 
-        kombinaa = []
-        kombinaa = self.reduce_kombina(kombina, kombinaa)
+        comb_victim_names = self.names_combinations(victim_names)
 
-        kombinaaw = []
-        kombinaaw = self.reduce_kombina(kombinaw, kombinaaw)
+        comb_wife_names = self.names_combinations(wife_names)
 
-        kombinaak = []
-        kombinaak = self.reduce_kombina(kombinak, kombinaak)
+        comb_kid_names = self.names_combinations(kid_names)
 
-        kombi = {}
+        all_combinations = {}
 
-        kombi[0] = self.generate_combinations_array(kombinaa, birthday_comb)
-        kombi[1] = self.generate_combinations_array(kombinaaw, wife_birthday_comb)
-        kombi[2] = self.generate_combinations_array(kombinaak, kid_birthday_comb)
+        all_combinations[0] = self.generate_combinations_array(comb_victim_names, birthday_comb)
+        all_combinations[1] = self.generate_combinations_array(comb_wife_names, wife_birthday_comb)
+        all_combinations[2] = self.generate_combinations_array(comb_kid_names, kid_birthday_comb)
 
-        kombi[3] = self.generate_combinations_array(kombinaa, years)
-        kombi[4] = self.generate_combinations_array(kombinaac, years)
-        kombi[5] = self.generate_combinations_array(kombinaaw, years)
-        kombi[6] = self.generate_combinations_array(kombinaak, years)
+        all_combinations[3] = self.generate_combinations_array(comb_victim_names, years)
+        all_combinations[4] = self.generate_combinations_array(comb_pet_company, years)
+        all_combinations[5] = self.generate_combinations_array(comb_wife_names, years)
+        all_combinations[6] = self.generate_combinations_array(comb_kid_names, years)
 
-        kombi[7] = self.generate_combinations_array(word, birthday_comb)
-        kombi[8] = self.generate_combinations_array(word, wife_birthday_comb)
-        kombi[9] = self.generate_combinations_array(word, kid_birthday_comb)
-        kombi[10] =  self.generate_combinations_array(word, years)
+        all_combinations[7] = self.generate_combinations_array(word, birthday_comb)
+        all_combinations[8] = self.generate_combinations_array(word, wife_birthday_comb)
+        all_combinations[9] = self.generate_combinations_array(word, kid_birthday_comb)
+        all_combinations[10] =  self.generate_combinations_array(word, years)
 
-        kombi[11] =  self.generate_combinations_array(reverse, years)
-        kombi[12] =  self.generate_combinations_array(rev_w, wife_birthday_comb)
-        kombi[13] =  self.generate_combinations_array(rev_k, kid_birthday_comb)
-        kombi[14] =  self.generate_combinations_array(rev_n, birthday_comb)
+        all_combinations[11] =  self.generate_combinations_array(reverse, years)
+        all_combinations[12] =  self.generate_combinations_array(rev_w, wife_birthday_comb)
+        all_combinations[13] =  self.generate_combinations_array(rev_k, kid_birthday_comb)
+        all_combinations[14] =  self.generate_combinations_array(rev_n, birthday_comb)
 
-        if profile["randnum"] == "y":
-            kombi[15] = list(self.concats(word, numfrom, numto))
-            kombi[16] = list(self.concats(kombinaa, numfrom, numto))
-            kombi[17] = list(self.concats(kombinaac, numfrom, numto))
-            kombi[18] = list(self.concats(kombinaaw, numfrom, numto))
-            kombi[19] = list(self.concats(kombinaak, numfrom, numto))
-            kombi[20] = list(self.concats(reverse, numfrom, numto))
+        if profile["randnum"] == True:
+            all_combinations[15] = list(self.concats(word, numfrom, numto))
+            all_combinations[16] = list(self.concats(comb_victim_names, numfrom, numto))
+            all_combinations[17] = list(self.concats(comb_pet_company, numfrom, numto))
+            all_combinations[18] = list(self.concats(comb_wife_names, numfrom, numto))
+            all_combinations[19] = list(self.concats(comb_kid_names, numfrom, numto))
+            all_combinations[20] = list(self.concats(reverse, numfrom, numto))
 
         komb001 = [""]
         komb002 = [""]
@@ -378,23 +354,23 @@ class cupp:
         komb005 = [""]
         komb006 = [""]
         if len(profile["spechars"]) > 0:
-            komb001 = list(self.komb(kombinaa, profile["spechars"]))
-            komb002 = list(self.komb(kombinaac, profile["spechars"]))
-            komb003 = list(self.komb(kombinaaw, profile["spechars"]))
-            komb004 = list(self.komb(kombinaak, profile["spechars"]))
+            komb001 = list(self.komb(comb_victim_names, profile["spechars"]))
+            komb002 = list(self.komb(comb_pet_company, profile["spechars"]))
+            komb003 = list(self.komb(comb_wife_names, profile["spechars"]))
+            komb004 = list(self.komb(comb_kid_names, profile["spechars"]))
             komb005 = list(self.komb(word, profile["spechars"]))
             komb006 = list(self.komb(reverse, profile["spechars"]))
 
         print("[+] Sorting list and removing duplicates...")
 
         komb_unique = {}
-        for i in range(0, len(kombi)):
-            komb_unique[i] = list(dict.fromkeys(kombi[i]).keys())
+        for i in range(0, len(all_combinations)):
+            komb_unique[i] = list(dict.fromkeys(all_combinations[i]).keys())
 
-        komb_unique01 = list(dict.fromkeys(kombinaa).keys())
-        komb_unique02 = list(dict.fromkeys(kombinaac).keys())
-        komb_unique03 = list(dict.fromkeys(kombinaaw).keys())
-        komb_unique04 = list(dict.fromkeys(kombinaak).keys())
+        komb_unique01 = list(dict.fromkeys(comb_victim_names).keys())
+        komb_unique02 = list(dict.fromkeys(comb_pet_company).keys())
+        komb_unique03 = list(dict.fromkeys(comb_wife_names).keys())
+        komb_unique04 = list(dict.fromkeys(comb_kid_names).keys())
         komb_unique05 = list(dict.fromkeys(word).keys())
         komb_unique07 = list(dict.fromkeys(komb001).keys())
         komb_unique08 = list(dict.fromkeys(komb002).keys())
@@ -428,7 +404,7 @@ class cupp:
         )
         unique_lista = list(dict.fromkeys(uniqlist).keys())
         unique_leet = []
-        if profile["leetmode"] == "y":
+        if profile["leetmode"] == True:
             for (x) in (unique_lista):  # if you want to add more leet chars, you will need to add more lines in cupp.cfg too...
 
                 x = self.make_leet(x)  # convert to leet
