@@ -1,50 +1,25 @@
-for i in range(0, len(others_content_visible)):
-    others_content.append(others_content_visible[i].a.get_text())
-    print(others_content)
+class backup:
 
-print(others_title + " " + others_content)
+    def write_in_file(self, profile):
+        f = open("backupFile.txt", "w")
+        f.write("name:" + profile["name"] + "\n")
+        f.write("work:" + profile["work"] + "\n")
+        f.write("study:" + profile["study"] + "\n")
+        f.write("cities:" + profile["hometown"] + "\n")
+        f.write("words:" + profile["words"] + "\n")
+        f.close()
 
-t = 1
-for i in range(0, 10):
-    for x in range(0, len(soup2)):
-        arq.write("%d- %s \n" %
-                  (t, soup2[x].a.get_text().encode(encoding='UTF-8', errors='strict')))
-        names.append("%s" % (soup2[x].a.get_text().encode(
-            encoding='UTF-8', errors='strict')))
-        t = t+1
-    URL = ("https://www.imdb.com/search/title?title_type=movie&genres=action&start={}&explore=title_type,genres&ref_=adv_nxt".format(t))
-    response = get(URL)
-    soup = BeautifulSoup(response.text, 'html.parser')
-    soup2 = soup.find_all("div", {"class": "lister-item-content"})
+    def read_from_file(self):
+        profile = []
+        f = open("backupFile.txt", "r")
+        for line in f:
+            profile[line.split(":")[0]] = line.split(":")[1]
 
-arq.close
-
-test_df = pd.DataFrame({'movie': names})
-print(test_df.info())
-test_df
+        return profile
 
 
-def main():
-    token = "EAAkZCSBZApuk4BAKbK6QD59NZBA1bOUHQ6ZC3WjRAslivLtaZCgXhp4Jv8l5wg6lGWczazj8BFJC2b3fB5L68ZACT8DEYMl4RcSZANQ8ZCEyQ5c5AcRZAqfWDiA1AratfuMZCbRjIGQNORGAHnDMSV8vo6ocUCS2DfisWOzcxS78M2K4mEeMfjGHNACvQnanbqz00ZD"
-    graph = facebook.GraphAPI(token)
-    # fields = ['first_name', 'location{location}','email','link']
-    id = 'cicero.henrique.92754'
-    profile = graph.get_object(
-        'me', fields='birthday,gender,hometown,location,name,favorite_athletes')
+    def __init__(self, profile):
+        self.write_in_file(profile)
+        # profile = self.read_from_file()
 
-    all_fields = ['user_birthday', 'hometown', 'location', 'likes', 'photos',
-                  'videos', 'friends', 'status', 'tagged_places', 'posts', 'gender', 'link',
-                  'age_range', 'email', 'instagram_basic', 'public_profile']
-
-    # post = graph.get_object(id='414573129108005', fields='message')
-    # print(post['message'])
-
-    # friends = graph.get_connections(id='me', connection_name='friends')
-    # print(friends)
-    # print(friends['data'])
-    # return desired fields
-    print(json.dumps(profile, indent=4))
-
-
-if __name__ == '__main__':
-    main()
+        print(profile)

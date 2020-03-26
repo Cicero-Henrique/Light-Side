@@ -238,7 +238,7 @@ class generate_passwords:
         names_birthdays_combinations = self.combine_arrays(all_names, all_birthdates)
 
         # Show the most obvious passwords combinations. E.g.: Combinations between name and nick, name and birthdate, name and wife name, pet company
-        # Hide the less obvious passwords combinaations. E.g.: Combinations based in social media 
+        # Hide the less obvious passwords combinations. E.g.: Combinations based in social media
 
         likes_combinations = self.combine_likes(profile["words"])
         self.combine_words()

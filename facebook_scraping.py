@@ -31,19 +31,21 @@ class facebook_scraping:
         page_name = table_favorites.find_all("div", {"class": "mediaPageName"})
 
         print(name)
-        profile["name"] = name.split(" ")[0]
-        profile["surname"] = name.split(" ")[1]
+        profile["name"] = name
         print("\t\t Work")
+        profile["work"] = []
         for i in range(0, len(work)):
             print(work[i].a.get_text())
-            profile["work"] = work[i].a.get_text()
+            profile["work"].append(work[i].a.get_text())
         print("\t\t Study")
+        profile["study"] = []
         for i in range(0, len(study)):
             print(study[i].a.get_text())
-            profile["study"] = study[i].a.get_text()
+            profile["study"].append(study[i].a.get_text())
         print("\n\n\t\tWas born in: " + cities[1].a.get_text() + " - Living in: " + cities[0].a.get_text())
-        profile["hometown"] = cities[1].a.get_text()
-        profile["city"] = cities[0].a.get_text()
+        profile["cities"] = []
+        for i in range(0, len(cities)):
+            profile["cities"].append(cities[i].a.get_text())
         for i in range(0, len(all_favorites)-1):
             titles.append(all_favorites[i].get_text())
             contents.append(page_name[i].get_text())
@@ -74,11 +76,6 @@ class facebook_scraping:
         #             print('{0:50}  {1}'.format(favorites[i], favorites[i+1]))
 
         profile["words"] = favorites
-
-        print("Name: " + profile["name"])
-        print("Surname: " + profile["surname"])
-        print("Work: " + profile["work"])
-        print("Study: " + profile["study"])
 
         return profile
 
