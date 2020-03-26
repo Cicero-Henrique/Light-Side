@@ -50,7 +50,7 @@ class generate_passwords:
             profile["leetmode"] = False
 
         return profile
-    
+
     def combinations_cases(self, names, case):
         combinations = []
 
@@ -66,24 +66,24 @@ class generate_passwords:
         else:
             for i in range(0, len(names)):
                 names[i] = str(names[i].lowercase())
-            
+
             for i in range(0, len(names)):
                 for j in range(0, len(names)):
                     combinations.append(names[i] + names[j].title())
-            
+
             return combinations
 
         for i in range(0, len(names)):
             for j in range(0, len(names)):
                 combinations.append(names[i] + names[j])
-        
+
         return combinations
 
     def combinations_reverse(self, words):
         combinations = []
         for word in words:
             combinations.append(word[::-1])
-        
+
         return combinations
 
     def generate_names(self, name, nickname):
@@ -112,7 +112,7 @@ class generate_passwords:
             short_day = str(day[0:])
         else:
             short_day = day
-        
+
         if(date[2:4] < 10):
             short_month = str(month[0:])
         else:
@@ -129,7 +129,7 @@ class generate_passwords:
         combinations.append(short_day + short_month + short_year)       # DMYY
         combinations.append(short_month + short_day + short_year)       # MDYY
         combinations.append(short_day + short_month + year)             # DMYYYY
-        combinations.append(short_month + short_day + year)             # MDYYYY       
+        combinations.append(short_month + short_day + year)             # MDYYYY
         return combinations
 
     def combination_names_birthdates(self, birthdates, names):
@@ -144,7 +144,7 @@ class generate_passwords:
                     for i in range(0, len(aux)-1):
                         word = word + aux[i] + birthdate
                     combinations.append(word)
-        return combinations            
+        return combinations
 
     def remove_articles(self, word):
         new_word = ''
@@ -157,11 +157,11 @@ class generate_passwords:
                     new_word = new_word + str(aux[i])
                 else:
                     new_word = new_word + aux[i].title()
-        
+
         return new_word
 
     def generate_words_combinations_with_special_chars(self, first_array, second_array):
-        chars = ['"""', '!', '"', '#', '$', '%', '&', "'", '(', ')', '*', '+', ',', '-', '.', '/', ':', 
+        chars = ['"""', '!', '"', '#', '$', '%', '&', "'", '(', ')', '*', '+', ',', '-', '.', '/', ':',
                     ';', '<', '=', '>', '?', '@', '[', '"\"', ']', '^', '_', '`', '{', '|', '}', '~']
         combinations = []
 
@@ -175,16 +175,16 @@ class generate_passwords:
                     combinations.append(sword + fword + char)
                     combinations.append(char + sword + fword)
                     combinations.append(sword + char + fword)
-        
+
         return combinations
 
     def generate_words_combinations(self, first_word, second_word):
         combinations = []
-        
+
         combinations.append(first_word + second_word)
         combinations.append(second_word + first_word)
         combinations.append(self.generate_words_combinations_with_special_chars(first_word, second_word))
-        
+
         return combinations
 
     def combine_arrays(self, arr1, arr2):
@@ -192,15 +192,15 @@ class generate_passwords:
         for word1 in arr1:
             for word2 in arr2:
                 combinations.append(self.generate_words_combinations(word1, word2))
-        
+
         return combinations
-            
+
     def combine_intern_info(self, names):
         combinations = []
         for first_array_name in names:
             for second_aray_name in names:
                 combinations.append(self.combine_arrays(first_array_name, second_aray_name))
-        
+
         return combinations
 
     def combine_likes(self, array_likes):
@@ -212,7 +212,7 @@ class generate_passwords:
                 first_like = self.generate_names(first_like, "")
                 second_like = self.generate_names(second_like, "")
                 combinations.append(self.generate_words_combinations(first_like, second_like))
-        
+
         return combinations
 
     def init(self, profile):
@@ -234,7 +234,7 @@ class generate_passwords:
         all_birthdates = [victim_birthdate_combinations, wife_birthdate_combinations, kid_birthdate_combinations]
         names_combinations = self.combine_intern_info(all_names)
         birthdays_combinations = self.combine_intern_info(all_birthdates)
-        
+
         names_birthdays_combinations = self.combine_arrays(all_names, all_birthdates)
 
         # Show the most obvious passwords combinations. E.g.: Combinations between name and nick, name and birthdate, name and wife name, pet company
@@ -244,5 +244,5 @@ class generate_passwords:
         self.combine_words()
         self.combine_words_birthdate()
         self.replace_by_special_chars()
-    
+
     init()
