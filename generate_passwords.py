@@ -51,14 +51,55 @@ class generate_passwords:
 
         return profile
     
-    def generate_names(self, profile):
+    def combinations_cases(self, names, case):
+        combinations = []
+
+        if(case == "lower"):
+            for i in range(0, len(names)):
+                names[i] = str(names[i].lowercase())
+        elif (case == "upper"):
+            for i in range(0, len(names)):
+                names[i] = str(names[i].uppercase())
+        elif (case == "title"):
+            for i in range(0, len(names)):
+                names[i] = str(names[i].title())
+        else:
+            for i in range(0, len(names)):
+                names[i] = str(names[i].lowercase())
+            
+            for i in range(0, len(names)):
+                for j in range(0, len(names)):
+                    combinations.append(names[i] + names[j].title())
+            
+            return combinations
+
+        for i in range(0, len(names)):
+            for j in range(0, len(names)):
+                combinations.append(names[i] + names[j])
+        
+        return combinations
+
+    def combinations_reverse(self, words):
+        combinations = []
+        for word in words:
+            combinations.append(word[::-1])
+        
+        return combinations
+
+    def generate_names(self, name, nickname):
         names = []
-        array_names = profile["name"].split(" ")
+        array_names = name.split(" ")
+        array_names = array_names.append(nickname)
 
+        for aux in array_names:
+            names.append(aux)
+        names.append(self.combinations_cases(array_names, "lower"))
+        names.append(self.combinations_cases(array_names, "upper"))
+        names.append(self.combinations_cases(array_names, "title"))
+        names.append(self.combinations_cases(array_names, "camel"))
+        names.append(self.combinations_reverse(names))
 
-                                        # continuar aqui
-
-
+        return names
 
     def generate_birthdates_combinations(self, date):
         combinations = []
@@ -90,22 +131,8 @@ class generate_passwords:
         combinations.append(short_day + short_month + year)             # DMYYYY
         combinations.append(short_month + short_day + year)             # MDYYYY       
         return combinations
-    
-    def generate_names_combinations(self, names):
-        combinations = []
-        for name in names:
-            combinations.append(name[::-1].title())
-            name = name.title()
-            combinations.append(name)
-            name.replace(" ", "")
-            combinations.append(name)
-            combinations.append(name.uppercase())
-            combinations.append(name.lowercase())
-            combinations.append(name[::-1])
-        
-        return combinations
 
-    def combination_birthdates_names(self, birthdates, names):
+    def combination_names_birthdates(self, birthdates, names):
         combinations = []
         for name in names:
             for birthdate in birthdates:
@@ -153,14 +180,26 @@ class generate_passwords:
 
     def generate_words_combinations(self, first_word, second_word):
         combinations = []
-        first_word_combinations = self.generate_names_combinations(first_word)
-        second_word_combinations = self.generate_names_combinations(second_word)
         
-        for fword in first_word_combinations:
-            for sword in second_word_combinations:
-                combinations.append(fword + sword)
-                combinations.append(sword + fword)
-        self.generate_words_combinations_with_special_chars(first_word, second_word)
+        combinations.append(first_word + second_word)
+        combinations.append(second_word + first_word)
+        combinations.append(self.generate_words_combinations_with_special_chars(first_word, second_word))
+        
+        return combinations
+
+    def combine_arrays(self, arr1, arr2):
+        combinations = []
+        for word1 in arr1:
+            for word2 in arr2:
+                combinations.append(self.generate_words_combinations(word1, word2))
+        
+        return combinations
+            
+    def combine_intern_info(self, names):
+        combinations = []
+        for first_array_name in names:
+            for second_aray_name in names:
+                combinations.append(self.combine_arrays(first_array_name, second_aray_name))
         
         return combinations
 
@@ -170,8 +209,8 @@ class generate_passwords:
             for j in range(0, len(array_likes)):
                 first_like = self.remove_articles(array_likes[i])
                 second_like = self.remove_articles(array_likes[j])
-                combinations.append(first_like + second_like)                                   # necessary in caseOf + thisThing happend
-                combinations.append(second_like + first_like)                                   # necessary in thisThing + caseOf happend
+                first_like = self.generate_names(first_like, "")
+                second_like = self.generate_names(second_like, "")
                 combinations.append(self.generate_words_combinations(first_like, second_like))
         
         return combinations
@@ -179,36 +218,29 @@ class generate_passwords:
     def init(self, profile):
         all_combinations = []
 
-        victim_names = self.generate_names(profile)
-
-        victim_names_combinations = self.generate_names_combinations(profile["name"], profile["nickname"])
+        victim_names = self.generate_names(profile["name"], profile["nickname"])
         victim_birthdate_combinations = self.generate_birthdates_combinations(profile["birthdate"])
-        victim_names_birthdate_combinations = self.combination_names_birthdates(victim_birthdate_combinations, victim_names_combinations)
 
-        wife_names_combinations = self.generate_names_combinations(profile["wife_name"], profile["wife_nickname"])
+        wife_names = self.generate_names(profile["wife_name"], profile["wife_nickname"])
         wife_birthdate_combinations = self.generate_birthdates_combinations(profile["wife_birthdate"])
-        wife_names_birthdate_combinations = self.combination_names_birthdates(wife_birthdate_combinations, wife_names_combinations)
 
-        kid_names_combinations = self.generate_names_combinations(profile["kid_name"], profile["kid_nickname"])
+        kid_names = self.generate_names(profile["kid_name"], profile["kid_nickname"])
         kid_birthdate_combinations = self.generate_birthdates_combinations(profile["kid_birthdate"])
-        kid_names_birthdate_combinations = self.combination_names_birthdates(kid_birthdate_combinations, kid_names_combinations)
 
-        family_combinations = self.combine_family(
-            victim_names_combinations, victim_birthdate_combinations,
-            wife_names_combinations, wife_birthdate_combinations,
-            kid_names_combinations, kid_names_birthdate_combinations
-        )
+        pet_names = self.generate_names(profile["pet"], "")
+        company_names = self.generate_names(profile["company"], "")
+
+        all_names = [victim_names, wife_names, kid_names, pet_names, company_names]
+        all_birthdates = [victim_birthdate_combinations, wife_birthdate_combinations, kid_birthdate_combinations]
+        names_combinations = self.combine_intern_info(all_names)
+        birthdays_combinations = self.combine_intern_info(all_birthdates)
         
-        # wife_names_combinations
-        # kid_names_combinations
-        # combine_family
-        # combine_profile                   pet, company
+        names_birthdays_combinations = self.combine_arrays(all_names, all_birthdates)
 
         # Show the most obvious passwords combinations. E.g.: Combinations between name and nick, name and birthdate, name and wife name, pet company
         # Hide the less obvious passwords combinaations. E.g.: Combinations based in social media 
 
-        all_combinations.append(self.combination_names_birthdates(birthdate_combinations, names_combinations))
-        all_combinations.append(self.combine_likes(profile["words"]))
+        likes_combinations = self.combine_likes(profile["words"])
         self.combine_words()
         self.combine_words_birthdate()
         self.replace_by_special_chars()
