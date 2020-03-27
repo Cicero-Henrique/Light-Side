@@ -51,21 +51,30 @@ class generate_passwords:
 
         return profile
 
+    def move_to_unique_array(self, array):
+        combinations = []
+        for i in range(0, len(array())):
+            if(type(array[i]) != list):
+                combinations.append(array[i])
+                return
+            else:
+                self.move_to_unique_array(array[i])
+
     def combinations_cases(self, names, case):
         combinations = []
 
         if(case == "lower"):
             for i in range(0, len(names)):
-                names[i] = str(names[i].lowercase())
+                names[i] = str(names[i].lower())
         elif (case == "upper"):
             for i in range(0, len(names)):
-                names[i] = str(names[i].uppercase())
+                names[i] = str(names[i].upper())
         elif (case == "title"):
             for i in range(0, len(names)):
                 names[i] = str(names[i].title())
         else:
             for i in range(0, len(names)):
-                names[i] = str(names[i].lowercase())
+                names[i] = str(names[i].lower())
 
             for i in range(0, len(names)):
                 for j in range(0, len(names)):
@@ -88,8 +97,8 @@ class generate_passwords:
 
     def generate_names(self, name, nickname):
         names = []
-        array_names = name.split(" ")
-        array_names = array_names.append(nickname)
+        array_names = name.split()
+        array_names.append(nickname)
 
         for aux in array_names:
             names.append(aux)
@@ -108,12 +117,12 @@ class generate_passwords:
         month = str(date[2:4])
         year = str(date[:4])
         short_year = str(year[1:])
-        if(date[2:] < 10):
+        if(int(date[2:]) < 10):
             short_day = str(day[0:])
         else:
             short_day = day
 
-        if(date[2:4] < 10):
+        if(int(date[2:4]) < 10):
             short_month = str(month[0:])
         else:
             short_month = month
@@ -215,23 +224,25 @@ class generate_passwords:
 
         return combinations
 
-    def init(self, profile):
+    def __init__(self, profile):
+        # self.get_information(profile)
         all_combinations = []
 
-        victim_names = self.generate_names(profile["name"], profile["nickname"])
-        victim_birthdate_combinations = self.generate_birthdates_combinations(profile["birthdate"])
+        victim_names = self.generate_names(profile["name"][0], profile["victim_nickname"][0])
+        victim_birthdate_combinations = self.generate_birthdates_combinations(profile["victim_birthdate"][0])
 
-        wife_names = self.generate_names(profile["wife_name"], profile["wife_nickname"])
-        wife_birthdate_combinations = self.generate_birthdates_combinations(profile["wife_birthdate"])
+        wife_names = self.generate_names(profile["wife_name"][0], profile["wife_nickname"][0])
+        wife_birthdate_combinations = self.generate_birthdates_combinations(profile["wife_birthdate"][0])
 
-        kid_names = self.generate_names(profile["kid_name"], profile["kid_nickname"])
-        kid_birthdate_combinations = self.generate_birthdates_combinations(profile["kid_birthdate"])
+        kid_names = self.generate_names(profile["kid_name"][0], profile["kid_nickname"][0])
+        kid_birthdate_combinations = self.generate_birthdates_combinations(profile["kid_birthdate"][0])
 
-        pet_names = self.generate_names(profile["pet"], "")
-        company_names = self.generate_names(profile["company"], "")
+        pet_names = self.generate_names(profile["pet"][0], "")
+        company_names = self.generate_names(profile["company"][0], "")
 
         all_names = [victim_names, wife_names, kid_names, pet_names, company_names]
         all_birthdates = [victim_birthdate_combinations, wife_birthdate_combinations, kid_birthdate_combinations]
+        all_names = self.move_to_unique_array(all_names)
         names_combinations = self.combine_intern_info(all_names)
         birthdays_combinations = self.combine_intern_info(all_birthdates)
 
@@ -245,4 +256,3 @@ class generate_passwords:
         self.combine_words_birthdate()
         self.replace_by_special_chars()
 
-    init()

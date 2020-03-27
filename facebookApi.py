@@ -1,13 +1,16 @@
 
 from facebook_scraping import facebook_scraping as fs
 from cupp import cupp
-from test_facebook_api import backup as backup
+from backup import backup
+from generate_passwords import generate_passwords
 
 URL = ("https://www.facebook.com/zuck")
 
-profile = fs.scraping(URL)
+# profile = fs.scraping(URL)
 #cupp(profile)
-backup(profile)
+profile = backup()._profile
+# backup(profile)
+generate_passwords(profile)
 #email = input("Insert your email: ")
 
 
