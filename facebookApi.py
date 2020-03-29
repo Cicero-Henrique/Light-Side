@@ -1,6 +1,6 @@
 
-from facebook_scraping import facebook_scraping as fs
-from cupp import cupp
+# from facebook_scraping import facebook_scraping as fs
+# from cupp import cupp
 from backup import backup
 from generate_passwords import generate_passwords
 
