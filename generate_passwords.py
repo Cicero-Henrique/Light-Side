@@ -57,25 +57,36 @@ class generate_passwords:
                 return True
         return False
 
-    def remove_duplicates(self, words):
-        duplicates = []
-        [duplicates.append(item) for item in words if item not in duplicates]
+    def remove_duplicates(self, dictionary):
 
+        for key in dictionary:
+            duplicates = []
+            [duplicates.append(item) for item in dictionary[key] if item not in duplicates]
+            dictionary[key] = duplicates
+
+        return dictionary
+
+    def remove_duplicates_array(self, array):
+        
+        duplicates = []
+        [duplicates.append(item) for item in array if item not in duplicates]
+        
         return duplicates
 
-    def move_to_unique_array(self, values):
-        uniqueArray = False
+    def move_to_unique_array(self, names):
         
-        while(uniqueArray is False):
-            external_words = [x for x in values if type(x) is str]
-            internal_words = [x for x in values if type(x) is list]
-            final = [j for i in internal_words for j in i]
-            
-            values = final + external_words
-            if( self.contains_list(values) is False):
-                uniqueArray = True
+        for key in names:
+            uniqueArray = False
+            while(uniqueArray is False):
+                external_words = [x for x in names[key] if type(x) is str]
+                internal_words = [x for x in names[key] if type(x) is list]
+                final = [j for i in internal_words for j in i]
+                
+                names[key] = final + external_words
+                if( self.contains_list(names[key]) is False):
+                    uniqueArray = True
         
-        return values
+        return names
 
     def combinations_cases(self, names, case):
         combinations = []
@@ -217,15 +228,15 @@ class generate_passwords:
         combinations = []
         for word1 in arr1:
             for word2 in arr2:
-                combinations.append(self.generate_words_combinations(word1, word2))
+                combinations = combinations + self.generate_words_combinations(word1, word2)
 
         return combinations
 
-    def combine_intern_info(self, names):
+    def combine_intern_info(self, dictionary):
         combinations = []
-        for i in range(0, len(names)):
-            for j in range(0, len(names)):
-                combinations = combinations + self.generate_words_combinations(names[i], names[j])
+        for key1 in dictionary:
+            for key2 in dictionary:
+                combinations = combinations + self.combine_arrays(dictionary[key1], dictionary[key2])
 
         return combinations
 
@@ -270,13 +281,15 @@ class generate_passwords:
             "wife_birthdate_combinations": wife_birthdate_combinations, 
             "kid_birthdate_combinations": kid_birthdate_combinations
         }
-        all_names = self.move_to_unique_array(list(all_names.values()))
-        all_birthdates = self.move_to_unique_array(list(all_birthdates.values()))
+        all_names = self.move_to_unique_array(all_names)
+        all_birthdates = self.move_to_unique_array(all_birthdates)
         all_names = self.remove_duplicates(all_names)
         all_birthdates = self.remove_duplicates(all_birthdates)
         
         names_combinations = self.combine_intern_info(all_names)
         birthdays_combinations = self.combine_intern_info(all_birthdates)
+        names_combinations = self.remove_duplicates_array(names_combinations)
+        birthdays_combinations = self.remove_duplicates_array(birthdays_combinations)
 
         names_birthdays_combinations = self.combine_arrays(names_combinations, birthdays_combinations)
 
