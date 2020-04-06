@@ -92,34 +92,32 @@ class generate_passwords:
         combinations = []
 
         if(case == "lower"):
-            for i in range(0, len(names)):
-                names[i] = str(names[i].lower())
+            for word in names:
+                combinations.append(str(word.lower()))
         elif (case == "upper"):
-            for i in range(0, len(names)):
-                names[i] = str(names[i].upper())
+            for word in names:
+                combinations.append(str(word.upper()))
         elif (case == "title"):
-            for i in range(0, len(names)):
-                names[i] = str(names[i].title())
+            for word in names:
+                combinations.append(str(word.title()))
         else:
-            for i in range(0, len(names)):
-                names[i] = str(names[i].lower())
+            for word in names:
+                combinations.append(str(word.lower()))
 
             for i in range(0, len(names)):
                 for j in range(0, len(names)):
                     combinations.append(names[i] + names[j].title())
-
-            return combinations
-
-        for i in range(0, len(names)):
-            for j in range(0, len(names)):
-                combinations.append(names[i] + names[j])
 
         return combinations
 
     def combinations_reverse(self, words):
         combinations = []
         for word in words:
-            combinations.append(word[::-1])
+            if(type(word) is list):
+                for aux in word:
+                    combinations.append(aux[::-1])
+            else:
+                combinations.append(word[::-1])
 
         return combinations
 
@@ -186,10 +184,10 @@ class generate_passwords:
     def remove_articles(self, word):
         new_word = ''
         aux = word.split(" ")
-        if(len(aux) != 1):
-            return aux
+        if(len(aux) == 1):
+            return word.title()
         for i in range(0, len(aux)):
-            if(aux[i] != 'a' or 'an' or 'the' or 'of'):
+            if(aux[i] != 'a' or 'an' or 'the'):
                 if(aux[i].isdigit() == True):
                     new_word = new_word + str(aux[i])
                 else:
@@ -197,21 +195,15 @@ class generate_passwords:
 
         return new_word
 
-    def generate_words_combinations_with_special_chars(self, first_array, second_array):
+    def generate_words_combinations_with_special_chars(self, fword, sword):
         chars = ['"""', '!', '"', '#', '$', '%', '&', "'", '(', ')', '*', '+', ',', '-', '.', '/', ':',
                     ';', '<', '=', '>', '?', '@', '[', '"\"', ']', '^', '_', '`', '{', '|', '}', '~']
         combinations = []
 
-        for fword in first_array:
-            for sword in second_array:
-                for char in chars:
-                    combinations.append(fword + sword + char)
-                    combinations.append(char + fword + sword)
-                    combinations.append(fword + char + sword)
-
-                    combinations.append(sword + fword + char)
-                    combinations.append(char + sword + fword)
-                    combinations.append(sword + char + fword)
+        for char in chars:
+            combinations.append(fword + sword + char)
+            combinations.append(char + fword + sword)
+            combinations.append(fword + char + sword)
 
         return combinations
 
@@ -219,38 +211,47 @@ class generate_passwords:
         combinations = []
 
         combinations.append(first_word + second_word)
-        combinations.append(second_word + first_word)
-        # combinations.append(self.generate_words_combinations_with_special_chars(first_word, second_word))
+        combinations.append(self.generate_words_combinations_with_special_chars(first_word, second_word))
 
         return combinations
 
-    def combine_arrays(self, arr1, arr2):
+    def combine_array(self, arr):
         combinations = []
-        for word1 in arr1:
-            for word2 in arr2:
+        i = 0
+        for word1 in arr:
+            i = i + 1
+            j = 0
+            for word2 in arr:
+                j = j + 1
+                print(str(i) + "/" + str(len(arr)) + "\t\t"+ str(j) + "/" + str(len(arr)))
                 combinations = combinations + self.generate_words_combinations(word1, word2)
 
         return combinations
 
-    def combine_intern_info(self, dictionary):
+    def combine_intern_info(self, words):
         combinations = []
-        for key1 in dictionary:
-            for key2 in dictionary:
-                combinations = combinations + self.combine_arrays(dictionary[key1], dictionary[key2])
+        for key1 in words:
+            for key2 in words:
+                combinations = combinations + self.generate_words_combinations(key1, key2)
 
         return combinations
 
     def combine_likes(self, array_likes):
         combinations = []
-        for i in range(0, len(array_likes)):
-            for j in range(0, len(array_likes)):
-                first_like = self.remove_articles(array_likes[i])
-                second_like = self.remove_articles(array_likes[j])
-                first_like = self.generate_names(first_like, "")
-                second_like = self.generate_names(second_like, "")
-                combinations.append(self.generate_words_combinations(first_like, second_like))
+        for like in array_likes:
+            combinations.append(self.remove_articles(like))
 
         return combinations
+
+    def from_dict_to_list(self, dict1, dict2):
+        unique = []
+        for arr in dict1.values():
+            unique = unique + arr
+        
+        for arr in dict2.values():
+            unique = unique + arr
+        
+        return unique
 
     def __init__(self, profile):
         # self.get_information(profile)
@@ -283,15 +284,27 @@ class generate_passwords:
         }
         all_names = self.move_to_unique_array(all_names)
         all_birthdates = self.move_to_unique_array(all_birthdates)
-        all_names = self.remove_duplicates(all_names)
-        all_birthdates = self.remove_duplicates(all_birthdates)
-        
-        names_combinations = self.combine_intern_info(all_names)
-        birthdays_combinations = self.combine_intern_info(all_birthdates)
-        names_combinations = self.remove_duplicates_array(names_combinations)
-        birthdays_combinations = self.remove_duplicates_array(birthdays_combinations)
+        # all_names = self.remove_duplicates(all_names)
+        # all_birthdates = self.remove_duplicates(all_birthdates)
 
-        names_birthdays_combinations = self.combine_arrays(names_combinations, birthdays_combinations)
+        likes = self.combine_likes(profile["words"])
+
+        all_intern_info = self.from_dict_to_list(all_names, all_birthdates)
+        
+        basewords = all_intern_info + likes
+        basewords = self.remove_duplicates_array(basewords)
+
+        all_combinations = self.combine_array(basewords)
+        # all_combinations = self.move_to_unique_array(basewords)
+
+        f = open('wordlist.txt', 'w')
+        for word in all_combinations:
+            if(type(word) is list):
+                for word2 in word:
+                    f.write(word2 + "\n")
+            else:
+                f.write(word + "\n")
+        f.close()
 
         # Show the most obvious passwords combinations. E.g.: Combinations between name and nick, name and birthdate, name and wife name, pet company
         # Hide the less obvious passwords combinations. E.g.: Combinations based in social media
