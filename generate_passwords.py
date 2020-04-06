@@ -253,20 +253,20 @@ class generate_passwords:
         return combinations
 
     def __init__(self, profile):
-        # self.get_information(profile)
+        self.get_information(profile)
         all_combinations = []
 
-        victim_names = self.generate_names(profile["name"][0], profile["victim_nickname"][0])
-        victim_birthdate_combinations = self.generate_birthdates_combinations(profile["victim_birthdate"][0])
+        victim_names = self.generate_names(profile["name"], profile["victim_nickname"])
+        victim_birthdate_combinations = self.generate_birthdates_combinations(profile["victim_birthdate"])
 
-        wife_names = self.generate_names(profile["wife_name"][0], profile["wife_nickname"][0])
-        wife_birthdate_combinations = self.generate_birthdates_combinations(profile["wife_birthdate"][0])
+        wife_names = self.generate_names(profile["wife_name"], profile["wife_nickname"])
+        wife_birthdate_combinations = self.generate_birthdates_combinations(profile["wife_birthdate"])
 
-        kid_names = self.generate_names(profile["kid_name"][0], profile["kid_nickname"][0])
-        kid_birthdate_combinations = self.generate_birthdates_combinations(profile["kid_birthdate"][0])
+        kid_names = self.generate_names(profile["kid_name"], profile["kid_nickname"])
+        kid_birthdate_combinations = self.generate_birthdates_combinations(profile["kid_birthdate"])
 
-        pet_names = self.generate_names(profile["pet"][0], "")
-        company_names = self.generate_names(profile["company"][0], "")
+        pet_names = self.generate_names(profile["pet"], "")
+        company_names = self.generate_names(profile["company"], "")
 
         print()
         all_names = {
@@ -291,7 +291,7 @@ class generate_passwords:
         names_combinations = self.remove_duplicates_array(names_combinations)
         birthdays_combinations = self.remove_duplicates_array(birthdays_combinations)
 
-        names_birthdays_combinations = self.combine_arrays(names_combinations, birthdays_combinations)
+        # names_birthdays_combinations = self.combine_arrays(names_combinations, birthdays_combinations)
 
         # Show the most obvious passwords combinations. E.g.: Combinations between name and nick, name and birthdate, name and wife name, pet company
         # Hide the less obvious passwords combinations. E.g.: Combinations based in social media
@@ -300,4 +300,3 @@ class generate_passwords:
         # self.combine_words()
         # self.combine_words_birthdate()
         # self.replace_by_special_chars()
-
