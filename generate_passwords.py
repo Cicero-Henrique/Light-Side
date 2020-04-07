@@ -167,6 +167,15 @@ class generate_passwords:
         combinations.append(short_month + short_day + year)             # MDYYYY
         return combinations
 
+    def generate_likes(self, likes):
+        combinations = []
+        combinations.append(self.combinations_cases(likes, "lower"))
+        combinations.append(self.combinations_cases(likes, "upper"))
+        combinations.append(self.combinations_cases(likes, "title"))
+        combinations.append(self.combinations_reverse(combinations))
+
+        return combinations
+
     def combination_names_birthdates(self, birthdates, names):
         combinations = []
         for name in names:
@@ -243,12 +252,9 @@ class generate_passwords:
 
         return combinations
 
-    def from_dict_to_list(self, dict1, dict2):
+    def from_dict_to_list(self, dict1):
         unique = []
         for arr in dict1.values():
-            unique = unique + arr
-        
-        for arr in dict2.values():
             unique = unique + arr
         
         return unique
@@ -262,6 +268,15 @@ class generate_passwords:
             else:
                 f.write(word + "\n")
         f.close()
+
+    def generate_likes_diff(self, likes):
+        combinations = []
+        for like in likes:
+            for word in like.lower().split(" "):
+                if(word != 'a' or 'an' or 'the'):
+                    combinations.append(word)
+
+        return combinations
 
     def __init__(self, profile):
         # self.get_information(profile)
@@ -279,7 +294,6 @@ class generate_passwords:
         pet_names = self.generate_names(profile["pet"][0], "")
         company_names = self.generate_names(profile["company"][0], "")
 
-        print()
         all_names = {
             "victim_names": victim_names, 
             "wife_names": wife_names, 
@@ -296,10 +310,23 @@ class generate_passwords:
         all_birthdates = self.move_to_unique_array(all_birthdates)
 
         likes = self.combine_likes(profile["words"])
-
-        all_intern_info = self.from_dict_to_list(all_names, all_birthdates)
+        #likes = self.generate_likes_diff(profile["words"])
+        all_intern_info = self.from_dict_to_list(all_names)
+        all_intern_info = all_intern_info + self.from_dict_to_list(all_birthdates)
         
-        basewords = all_intern_info + likes
+        build_intermediate = False
+        if(build_intermediate):
+            base_likes = self.generate_likes(likes)
+            all_likes = {
+                "lower": base_likes[0],
+                "tile": base_likes[2],
+                "camel": likes
+            }
+
+            basewords = all_intern_info + self.from_dict_to_list(all_likes)
+        else:
+            basewords = all_intern_info + likes
+        
         basewords = self.remove_duplicates_array(basewords)
 
         all_combinations = self.combine_array(basewords)
@@ -309,7 +336,6 @@ class generate_passwords:
         # Hide the less obvious passwords combinations. E.g.: Combinations based in social media
 
         # Combinations on branch master will be the deepest combinations, more processing
-        # Combinations intermediate will be generating all kind of write including the name of pages
         # Combinations on branch alternative will be the fastest
         # Implements password verification (contains)
         # Implements the option to substitution by special chars
