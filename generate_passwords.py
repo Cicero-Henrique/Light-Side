@@ -253,6 +253,16 @@ class generate_passwords:
         
         return unique
 
+    def write_in_file(self, all_combinations):
+        f = open('wordlist.txt', 'w')
+        for word in all_combinations:
+            if(type(word) is list):
+                for word2 in word:
+                    f.write(word2 + "\n")
+            else:
+                f.write(word + "\n")
+        f.close()
+
     def __init__(self, profile):
         # self.get_information(profile)
         all_combinations = []
@@ -284,8 +294,6 @@ class generate_passwords:
         }
         all_names = self.move_to_unique_array(all_names)
         all_birthdates = self.move_to_unique_array(all_birthdates)
-        # all_names = self.remove_duplicates(all_names)
-        # all_birthdates = self.remove_duplicates(all_birthdates)
 
         likes = self.combine_likes(profile["words"])
 
@@ -295,22 +303,14 @@ class generate_passwords:
         basewords = self.remove_duplicates_array(basewords)
 
         all_combinations = self.combine_array(basewords)
-        # all_combinations = self.move_to_unique_array(basewords)
-
-        f = open('wordlist.txt', 'w')
-        for word in all_combinations:
-            if(type(word) is list):
-                for word2 in word:
-                    f.write(word2 + "\n")
-            else:
-                f.write(word + "\n")
-        f.close()
+        self.write_in_file(all_combinations)
 
         # Show the most obvious passwords combinations. E.g.: Combinations between name and nick, name and birthdate, name and wife name, pet company
         # Hide the less obvious passwords combinations. E.g.: Combinations based in social media
 
-        # likes_combinations = self.combine_likes(profile["words"])
-        # self.combine_words()
-        # self.combine_words_birthdate()
-        # self.replace_by_special_chars()
-
+        # Combinations on branch master will be the deepest combinations, more processing
+        # Combinations intermediate will be generating all kind of write including the name of pages
+        # Combinations on branch alternative will be the fastest
+        # Implements password verification (contains)
+        # Implements the option to substitution by special chars
+        # Fix the UI
