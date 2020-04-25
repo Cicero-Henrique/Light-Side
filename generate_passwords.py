@@ -51,6 +51,16 @@ class generate_passwords:
 
         return profile
 
+    def get_level(self):
+        print("Choose the level of combinations: ")
+        print("1- Soft")
+        print("2- Intermediate")
+        print("3- Intense")
+        x = 4
+        while(int(x) > 3 or int(x) < 1):
+            x = input("What you prefer? ")
+        return int(x)
+
     def contains_list(self, combinations):
         for i in combinations:
             if(type(i) is list):
@@ -67,25 +77,25 @@ class generate_passwords:
         return dictionary
 
     def remove_duplicates_array(self, array):
-        
+
         duplicates = []
         [duplicates.append(item) for item in array if item not in duplicates]
-        
+
         return duplicates
 
     def move_to_unique_array(self, names):
-        
+
         for key in names:
             uniqueArray = False
             while(uniqueArray is False):
                 external_words = [x for x in names[key] if type(x) is str]
                 internal_words = [x for x in names[key] if type(x) is list]
                 final = [j for i in internal_words for j in i]
-                
+
                 names[key] = final + external_words
                 if( self.contains_list(names[key]) is False):
                     uniqueArray = True
-        
+
         return names
 
     def combinations_cases(self, names, case):
@@ -280,6 +290,7 @@ class generate_passwords:
 
     def __init__(self, profile):
         # self.get_information(profile)
+        profile["level"] = self.get_level()
         all_combinations = []
 
         victim_names = self.generate_names(profile["name"][0], profile["victim_nickname"][0])
@@ -295,15 +306,15 @@ class generate_passwords:
         company_names = self.generate_names(profile["company"][0], "")
 
         all_names = {
-            "victim_names": victim_names, 
-            "wife_names": wife_names, 
-            "kid_names": kid_names, 
-            "pet_names": pet_names, 
+            "victim_names": victim_names,
+            "wife_names": wife_names,
+            "kid_names": kid_names,
+            "pet_names": pet_names,
             "company_names": company_names
         }
         all_birthdates = {
-            "victim_birthdate_combinations": victim_birthdate_combinations, 
-            "wife_birthdate_combinations": wife_birthdate_combinations, 
+            "victim_birthdate_combinations": victim_birthdate_combinations,
+            "wife_birthdate_combinations": wife_birthdate_combinations,
             "kid_birthdate_combinations": kid_birthdate_combinations
         }
         all_names = self.move_to_unique_array(all_names)
@@ -313,9 +324,10 @@ class generate_passwords:
         #likes = self.generate_likes_diff(profile["words"])
         all_intern_info = self.from_dict_to_list(all_names)
         all_intern_info = all_intern_info + self.from_dict_to_list(all_birthdates)
-        
-        build_intermediate = False
-        if(build_intermediate):
+
+        if(profile["level"] == 1):
+            basewords = all_intern_info + likes
+        elif(profile["level"] == 2):
             base_likes = self.generate_likes(likes)
             all_likes = {
                 "lower": base_likes[0],
@@ -325,8 +337,10 @@ class generate_passwords:
 
             basewords = all_intern_info + self.from_dict_to_list(all_likes)
         else:
-            basewords = all_intern_info + likes
-        
+            names_birthdays = self.combination_names_birthdates(all_birthdates, all_names)
+            likes_birthdays = self.combination_names_birthdates(likes, all_names)
+            basewords = all_intern_info + names_birthdays + likes_birthdays
+
         basewords = self.remove_duplicates_array(basewords)
 
         all_combinations = self.combine_array(basewords)
