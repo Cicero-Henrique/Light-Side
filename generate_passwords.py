@@ -319,7 +319,7 @@ class generate_passwords:
         weak = self.first_look(password)
         if(not weak):
             for word in data:
-                if password in word:
+                if word in password and word != '':
                     weak = True
                     print("Your password is weak, I found " + word + " in your profile.")
                     return weak
