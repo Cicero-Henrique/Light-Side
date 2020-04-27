@@ -428,9 +428,10 @@ class generate_passwords:
                 if (not self.is_weak(all_intern_info)):
                     print("Congratulations, this passwords looks fine.")
                 op = "C"
-                while (op.lower() != "n" or op.lower() != "y"):
+                while (op.lower() != 'n' or op.lower() != 'y'):
                     op = input("Do you want to try another password? Y/N ")
-                    print(op.lower() == "y")                                        # TO FIX
+                    if(op.lower() == 'n' or op.lower() == 'y'):
+                        break
                 if(op.lower() == "n"):
                     want_finish = True
 
