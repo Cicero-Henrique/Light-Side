@@ -319,7 +319,7 @@ class generate_passwords:
         weak = self.first_look(password)
         if(not weak):
             for word in data:
-                if word in password and word != '':
+                if word.lower() in password.lower() and word != '':
                     weak = True
                     print("Your password is weak, I found " + word + " in your profile.")
                     return weak
@@ -331,42 +331,42 @@ class generate_passwords:
     def __init__(self, profile):
         # self.get_information(profile)
         generate = False
+        all_combinations = []
+
+        victim_names = self.generate_names(profile["name"][0], profile["victim_nickname"][0])
+        victim_birthdate_combinations = self.generate_birthdates_combinations(profile["victim_birthdate"][0])
+
+        wife_names = self.generate_names(profile["wife_name"][0], profile["wife_nickname"][0])
+        wife_birthdate_combinations = self.generate_birthdates_combinations(profile["wife_birthdate"][0])
+
+        kid_names = self.generate_names(profile["kid_name"][0], profile["kid_nickname"][0])
+        kid_birthdate_combinations = self.generate_birthdates_combinations(profile["kid_birthdate"][0])
+
+        pet_names = self.generate_names(profile["pet"][0], "")
+        company_names = self.generate_names(profile["company"][0], "")
+
+        all_names = {
+            "victim_names": victim_names,
+            "wife_names": wife_names,
+            "kid_names": kid_names,
+            "pet_names": pet_names,
+            "company_names": company_names
+        }
+        all_birthdates = {
+            "victim_birthdate_combinations": victim_birthdate_combinations,
+            "wife_birthdate_combinations": wife_birthdate_combinations,
+            "kid_birthdate_combinations": kid_birthdate_combinations
+        }
+        all_names = self.move_to_unique_array(all_names)
+        all_birthdates = self.move_to_unique_array(all_birthdates)
+
+        likes = self.combine_likes(profile["words"])
+        #likes = self.generate_likes_diff(profile["words"])
+        all_intern_info = self.from_dict_to_list(all_names)
+        all_intern_info = all_intern_info + self.from_dict_to_list(all_birthdates)
+
         if(generate):
             profile["level"] = self.get_level()
-            all_combinations = []
-
-            victim_names = self.generate_names(profile["name"][0], profile["victim_nickname"][0])
-            victim_birthdate_combinations = self.generate_birthdates_combinations(profile["victim_birthdate"][0])
-
-            wife_names = self.generate_names(profile["wife_name"][0], profile["wife_nickname"][0])
-            wife_birthdate_combinations = self.generate_birthdates_combinations(profile["wife_birthdate"][0])
-
-            kid_names = self.generate_names(profile["kid_name"][0], profile["kid_nickname"][0])
-            kid_birthdate_combinations = self.generate_birthdates_combinations(profile["kid_birthdate"][0])
-
-            pet_names = self.generate_names(profile["pet"][0], "")
-            company_names = self.generate_names(profile["company"][0], "")
-
-            all_names = {
-                "victim_names": victim_names,
-                "wife_names": wife_names,
-                "kid_names": kid_names,
-                "pet_names": pet_names,
-                "company_names": company_names
-            }
-            all_birthdates = {
-                "victim_birthdate_combinations": victim_birthdate_combinations,
-                "wife_birthdate_combinations": wife_birthdate_combinations,
-                "kid_birthdate_combinations": kid_birthdate_combinations
-            }
-            all_names = self.move_to_unique_array(all_names)
-            all_birthdates = self.move_to_unique_array(all_birthdates)
-
-            likes = self.combine_likes(profile["words"])
-            #likes = self.generate_likes_diff(profile["words"])
-            all_intern_info = self.from_dict_to_list(all_names)
-            all_intern_info = all_intern_info + self.from_dict_to_list(all_birthdates)
-
             if(profile["level"] == 1):
                 basewords = all_intern_info + likes
             elif(profile["level"] == 2):
@@ -388,40 +388,6 @@ class generate_passwords:
             all_combinations = self.combine_array(basewords)
             self.write_in_file(all_combinations)
         else:
-            all_combinations = []
-
-            victim_names = self.generate_names(profile["name"][0], profile["victim_nickname"][0])
-            victim_birthdate_combinations = self.generate_birthdates_combinations(profile["victim_birthdate"][0])
-
-            wife_names = self.generate_names(profile["wife_name"][0], profile["wife_nickname"][0])
-            wife_birthdate_combinations = self.generate_birthdates_combinations(profile["wife_birthdate"][0])
-
-            kid_names = self.generate_names(profile["kid_name"][0], profile["kid_nickname"][0])
-            kid_birthdate_combinations = self.generate_birthdates_combinations(profile["kid_birthdate"][0])
-
-            pet_names = self.generate_names(profile["pet"][0], "")
-            company_names = self.generate_names(profile["company"][0], "")
-
-            all_names = {
-                "victim_names": victim_names,
-                "wife_names": wife_names,
-                "kid_names": kid_names,
-                "pet_names": pet_names,
-                "company_names": company_names
-            }
-            all_birthdates = {
-                "victim_birthdate_combinations": victim_birthdate_combinations,
-                "wife_birthdate_combinations": wife_birthdate_combinations,
-                "kid_birthdate_combinations": kid_birthdate_combinations
-            }
-            all_names = self.move_to_unique_array(all_names)
-            all_birthdates = self.move_to_unique_array(all_birthdates)
-
-            likes = self.combine_likes(profile["words"])
-            #likes = self.generate_likes_diff(profile["words"])
-            all_intern_info = self.from_dict_to_list(all_names)
-            all_intern_info = all_intern_info + self.from_dict_to_list(all_birthdates)
-            all_intern_info = all_intern_info + likes
             all_intern_info = self.remove_duplicates_array(all_intern_info)
             want_finish = False
             while not want_finish:
