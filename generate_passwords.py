@@ -326,11 +326,20 @@ class generate_passwords:
 
         return weak
 
+    def menu(self):
+        op = 3
+        while int(op) != 1 and int(op) != 2:
+            print('\t\t MENU')
+            print('1- Generate wordlist')
+            print('2- Validate password')
+            op = input('What is your choice number: ')
+
 
 
     def __init__(self, profile):
         # self.get_information(profile)
         generate = False
+        op = self.menu()
         all_combinations = []
 
         victim_names = self.generate_names(profile["name"][0], profile["victim_nickname"][0])
