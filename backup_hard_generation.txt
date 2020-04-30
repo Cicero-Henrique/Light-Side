@@ -74,41 +74,41 @@ class generate_passwords:
         return duplicates
 
     def move_to_unique_array(self, names):
-
+        
         for key in names:
             uniqueArray = False
             while(uniqueArray is False):
                 external_words = [x for x in names[key] if type(x) is str]
                 internal_words = [x for x in names[key] if type(x) is list]
                 final = [j for i in internal_words for j in i]
-
+                
                 names[key] = final + external_words
                 if( self.contains_list(names[key]) is False):
                     uniqueArray = True
-
+        
         return names
 
     def combinations_cases(self, names, case):
         combinations = []
 
         if(case == "lower"):
-            for word in names:
-                combinations.append(str(word.lower()))
+            for i in range(0, len(names)):
+                names[i] = str(names[i].lower())
         elif (case == "upper"):
-            for word in names:
-                combinations.append(str(word.upper()))
+            for i in range(0, len(names)):
+                names[i] = str(names[i].upper())
         elif (case == "title"):
-            for word in names:
-                combinations.append(str(word.title()))
+            for i in range(0, len(names)):
+                names[i] = str(names[i].title())
         else:
-            for word in names:
-                combinations.append(str(word.lower()))
+            for i in range(0, len(names)):
+                names[i] = str(names[i].lower())
 
             for i in range(0, len(names)):
                 for j in range(0, len(names)):
                     combinations.append(names[i] + names[j].title())
 
-        return combinations
+            return combinations
 
         for i in range(0, len(names)):
             for j in range(0, len(names)):
