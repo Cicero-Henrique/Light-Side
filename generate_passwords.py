@@ -1,4 +1,5 @@
 import os
+from multiprocessing import Pool
 
 class generate_passwords:
 
@@ -29,11 +30,11 @@ class generate_passwords:
         profile["company"] = input("> Company name: ").lower()
         print("\r\n")
 
-        # answer = input("> Do you want to add special chars at the end of words? Y/[N]: ").lower()
-        # if(answer == 'y'):
-        #     profile["spechars_validation"] = True
-        # else:
-        #     profile["spechars_validation"] = False
+        answer = input("> Do you want to add special chars at the end of words? Y/[N]: ").lower()
+        if(answer == 'y'):
+            profile["spechars_validation"] = True
+        else:
+            profile["spechars_validation"] = False
 
         # answer = input("> Do you want to add some random numbers at the end of words? Y/[N]:").lower()
         # if(answer == 'y'):
@@ -95,6 +96,18 @@ class generate_passwords:
                     uniqueArray = True
 
         return names
+
+    def move_to_unique_array_final(self, array):
+
+        combinations = []
+        for word in array:
+            if(type(word) == list):
+                for word2 in word:
+                    combinations.append(word2)
+            else:
+                combinations.append(word)
+
+        return combinations
 
     def combinations_cases(self, names, case):
         combinations = []
@@ -277,6 +290,13 @@ class generate_passwords:
                 f.write(word + "\n")
         f.close()
 
+    def write_and_replace(self, all_combinations):
+        f = open('wordlist.txt', 'w')
+        for word in all_combinations:
+            f.write(word + '\n')
+            f.write(self.replace_by_spec_chars(word) + '\n')
+        f.close()
+
     def generate_likes_diff(self, likes):
         combinations = []
         for like in likes:
@@ -285,6 +305,40 @@ class generate_passwords:
                     combinations.append(word)
 
         return combinations
+
+    def replace_by_spec_chars(self, word):
+
+
+        replaced = ''
+        word = word.lower()
+        if('a' in word):
+            replaced = word.replace('a', '@')
+            #combinations.append(replaced)
+        if('e' in word):
+            replaced = replaced.replace('e', '3')
+
+            # combinations.append(word.replace('e', '3'))
+            # combinations.append(replaced)
+        if('o' in word):
+            replaced = replaced.replace('o', '0')
+
+            # combinations.append(word.replace('o', '0'))
+            # combinations.append(replaced)
+        if('s' in word):
+            replaced = replaced.replace('s', '5')
+
+            # combinations.append(word.replace('s', '5'))
+            # combinations.append(replaced)
+        if('i' in word):
+            replaced = replaced.replace('i', '!')
+            # combinations.append(word.replace('i', '!'))
+            # combinations.append(replaced)
+
+            replaced = replaced.replace('!', '1')
+            # combinations.append(word.replace('!', '1'))
+            # combinations.append(replaced)
+
+        return replaced
 
     def first_look(self, word):
         chars = ['"""', '!', '"', '#', '$', '%', '&', "'", '(', ')', '*', '+', ',', '-', '.', '/', ':',
@@ -393,10 +447,17 @@ class generate_passwords:
                     likes_birthdays = self.combination_names_birthdates(likes, all_names)
                     basewords = all_intern_info + names_birthdays + likes_birthdays
 
-                basewords = self.remove_duplicates_array(basewords)
 
+                basewords = self.remove_duplicates_array(basewords)
                 all_combinations = self.combine_array(basewords)
-                self.write_in_file(all_combinations)
+
+                profile["spechars_validation"] = False
+                if(profile["spechars_validation"]):
+                    all_combinations = self.move_to_unique_array_final(all_combinations)
+                    self.write_and_replace(all_combinations)
+                else:
+                    self.write_in_file(all_combinations)
+
             elif op == '2':
                 all_intern_info = self.remove_duplicates_array(all_intern_info)
                 want_finish = False
