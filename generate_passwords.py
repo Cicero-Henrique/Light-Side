@@ -1,53 +1,49 @@
 class generate_passwords:
 
+    def get_birthday(self):
+        birthday = input("\t\t Birthday (DDMMYYYY): ")
+        while len(birthday) != 8 and birthday.isdigit():
+            print("\r\n[-] You must enter 8 digits for birthday!")
+            birthday = input("> Birthday (DDMMYYYY): ")
+        return str(birthday)
+
     def get_information(self, profile):
 
-        profile["victim_nickname"] = input("> Nickname: ").lower()
-        birthdate = input("> Birthdate (DDMMYYYY): ")
-        while len(birthdate) != 0 and len(birthdate) != 8:
-            print("\r\n[-] You must enter 8 digits for birthday!")
-            birthdate = input("> Birthdate (DDMMYYYY): ")
-        profile["victim_birthdate"] = str(birthdate)
+        profile["victim_nickname"] = input("\t\t Nickname: ").lower()
+        profile["victim_birthdate"] = self.get_birthday()
 
-        profile["wife_name"] = input("> Partners) name: ").lower()
-        profile["wife_nickname"] = input("> Partners) nickname: ").lower()
-        wifeb = input("> Partners) birthdate (DDMMYYYY): ")
-        while len(wifeb) != 0 and len(wifeb) != 8:
-            print("\r\n[-] You must enter 8 digits for birthday!")
-            wifeb = input("> Partners birthdate (DDMMYYYY): ")
-        profile["wife_birthdate"] = str(wifeb)
-        print("\r\n")
+        print("\n\n")
+        profile["wife_name"] = input("\t\t Partners name: ").lower()
+        profile["wife_nickname"] = input("\t\t Partners nickname: ").lower()
+        profile["wife_birthdate"] = self.get_birthday()
 
-        profile["kid_name"] = input("> Child's name: ").lower()
-        profile["kid_nickname"] = input("> Child's nickname: ").lower()
-        kidb = input("> Child's birthdate (DDMMYYYY): ")
-        while len(kidb) != 0 and len(kidb) != 8:
-            print("\r\n[-] You must enter 8 digits for birthday!")
-            kidb = input("> Child's birthdate (DDMMYYYY): ")
-        profile["kid_birthdate"] = str(kidb)
+        print("\n\n")
+        profile["kid_name"] = input("\t\t Child's name: ").lower()
+        profile["kid_nickname"] = input("\t\t Child's nickname: ").lower()
+        profile["kid_birthdate"] = self.get_birthday()
         print("\r\n")
 
         profile["pet"] = input("> Pet's name: ").lower()
         profile["company"] = input("> Company name: ").lower()
         print("\r\n")
 
-        answer = input("> Do you want to add special chars at the end of words? Y/[N]: ").lower()
-        if(answer == 'y'):
-            profile["spechars_validation"] = True
-        else:
-            profile["spechars_validation"] = False
+        # answer = input("> Do you want to add special chars at the end of words? Y/[N]: ").lower()
+        # if(answer == 'y'):
+        #     profile["spechars_validation"] = True
+        # else:
+        #     profile["spechars_validation"] = False
 
-        answer = input("> Do you want to add some random numbers at the end of words? Y/[N]:").lower()
-        if(answer == 'y'):
-            profile["randnum"] = True
-        else:
-            profile["randnum"] = False
+        # answer = input("> Do you want to add some random numbers at the end of words? Y/[N]:").lower()
+        # if(answer == 'y'):
+        #     profile["randnum"] = True
+        # else:
+        #     profile["randnum"] = False
 
-        answer = input("> Leet mode? (i.e. leet = 1337) Y/[N]: ").lower()
-        if(answer == 'y'):
-            profile["leetmode"] = True
-        else:
-            profile["leetmode"] = False
+        # answer = input("> Leet mode? (i.e. leet = 1337) Y/[N]: ").lower()
+        # if(answer == 'y'):
+        #     profile["leetmode"] = True
+        # else:
+        #     profile["leetmode"] = False
 
         return profile
 
@@ -328,17 +324,17 @@ class generate_passwords:
 
     def menu(self):
         op = 3
-        while int(op) != 1 and int(op) != 2:
+        while op != '1' and op != '2':
             print('\t\t MENU')
             print('1- Generate wordlist')
             print('2- Validate password')
             op = input('What is your choice number: ')
+        return op
 
 
 
     def __init__(self, profile):
         # self.get_information(profile)
-        generate = False
         op = self.menu()
         all_combinations = []
 
@@ -374,11 +370,11 @@ class generate_passwords:
         all_intern_info = self.from_dict_to_list(all_names)
         all_intern_info = all_intern_info + self.from_dict_to_list(all_birthdates)
 
-        if(generate):
-            profile["level"] = self.get_level()
-            if(profile["level"] == 1):
+        if(op == '1'):
+            level = self.get_level()
+            if(level == 1):
                 basewords = all_intern_info + likes
-            elif(profile["level"] == 2):
+            elif(level == 2):
                 base_likes = self.generate_likes(likes)
                 all_likes = {
                     "lower": base_likes[0],
@@ -415,6 +411,5 @@ class generate_passwords:
 
         # Combinations on branch master will be the deepest combinations, more processing
         # Combinations on branch alternative will be the fastest
-        # Implements password verification (contains)
-        # Implements the option to substitution by special chars
+        # Implements the option to replace by special chars
         # Fix the UI
