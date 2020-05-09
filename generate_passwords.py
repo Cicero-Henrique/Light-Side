@@ -19,15 +19,33 @@ class generate_passwords:
         profile["wife_nickname"] = input("\t\t Partners nickname: ").lower()
         profile["wife_birthdate"] = self.get_birthday()
 
-        print("\n\n")
-        profile["kid_name"] = input("\t\t Child's name: ").lower()
-        profile["kid_nickname"] = input("\t\t Child's nickname: ").lower()
-        profile["kid_birthdate"] = self.get_birthday()
-        print("\r\n")
+        childs = True
+        profile["kids"] = []
+        while(childs is True):
+            print("\n\n")
+            kid = {
+                "name" : input("\t\t Child's name: ").lower(),
+                "nickname" : input("\t\t Child's nickname: ").lower(),
+                "birthdate" : self.get_birthday()
+            }
+            profile["kids"].append(kid)
+            childs = input("Do you want more kids Y/N? ").lower()
+            if(childs == 'y'):
+                childs = True
+            else:
+                childs = False
+            print("\r\n")
 
         profile["pet"] = input("> Pet's name: ").lower()
         profile["company"] = input("> Company name: ").lower()
         print("\r\n")
+
+        answer = input("> Do you want to add some extra words? Y/[N]: ").lower()
+        if(answer == 'y'):
+            answer = input("> Insert all words separated by ',' : ").lower()
+            profile["extra_info"] = answer
+        else:
+            profile["extra_info"] = False
 
         answer = input("> Do you want to add special chars at the end of words? Y/[N]: ").lower()
         if(answer == 'y'):
@@ -105,6 +123,20 @@ class generate_passwords:
         combinations = []
         for word in words:
             combinations.append(word[::-1])
+
+        return combinations
+
+    def generate_kids_names(self, kids):
+        combinations = []
+        for kid in kids:
+            combinations.append(self.generate_names(kid.name, kid.nickname))
+
+        return combinations
+
+    def generate_kids_birthdays(self, kids):
+        combinations = []
+        for kid in kids:
+            combinations.append(self.generate_birthdates_combinations(kid.birthday))
 
         return combinations
 
@@ -383,8 +415,8 @@ class generate_passwords:
             wife_names = self.generate_names(profile["wife_name"], profile["wife_nickname"])
             wife_birthdate_combinations = self.generate_birthdates_combinations(profile["wife_birthdate"])
 
-            kid_names = self.generate_names(profile["kid_name"], profile["kid_nickname"])
-            kid_birthdate_combinations = self.generate_birthdates_combinations(profile["kid_birthdate"])
+            kid_names = self.generate_kids_names(profile["kids"])
+            kid_birthdate_combinations = self.generate_kids_birthdays(profile["kid_birthdate"])
 
             pet_names = self.generate_names(profile["pet"], "")
             company_names = self.generate_names(profile["company"], "")
@@ -465,7 +497,7 @@ class generate_passwords:
         # Show the most obvious passwords combinations. E.g.: Combinations between name and nick, name and birthdate, name and wife name, pet company
         # Hide the less obvious passwords combinations. E.g.: Combinations based in social media
 
-        # likes_combinations = self.combine_likes(profile["words"])
-        # self.combine_words()
-        # self.combine_words_birthdate()
-        # self.replace_by_special_chars()
+        # Be sure that all info is being used
+        # Improve the scraping
+        # Reduce the code
+        # Separate in modules
