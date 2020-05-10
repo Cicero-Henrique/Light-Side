@@ -180,14 +180,14 @@ class generate_passwords:
     def generate_kids_names(self, kids):
         combinations = []
         for kid in kids:
-            combinations.append(self.generate_names(kid.name, kid.nickname))
+            combinations.append(self.generate_names(kid["name"], kid["nickname"]))
 
         return combinations
 
     def generate_kids_birthdays(self, kids):
         combinations = []
         for kid in kids:
-            combinations.append(self.generate_birthdates_combinations(kid.birthday))
+            combinations.append(self.generate_birthdates_combinations(kid["birthdate"]))
 
         return combinations
 
@@ -249,6 +249,11 @@ class generate_passwords:
                     for i in range(0, len(aux)-1):
                         word = word + aux[i] + birthdate
                     combinations.append(word)
+        return combinations
+
+    def prepare_extra_info(self, info):
+        combinations = []
+        combinations = info.split(",")
         return combinations
 
     def generate_likes(self, likes):
@@ -467,17 +472,15 @@ class generate_passwords:
             wife_birthdate_combinations = self.generate_birthdates_combinations(profile["wife_birthdate"])
 
             kid_names = self.generate_kids_names(profile["kids"])
-            kid_birthdate_combinations = self.generate_kids_birthdays(profile["kid_birthdate"])
+            kid_birthdate_combinations = self.generate_kids_birthdays(profile["kids"])
 
             pet_names = self.generate_names(profile["pet"], "")
-            company_names = self.generate_names(profile["company"], "")
 
             all_names = {
                 "victim_names": victim_names,
                 "wife_names": wife_names,
                 "kid_names": kid_names,
-                "pet_names": pet_names,
-                "company_names": company_names
+                "pet_names": pet_names
             }
             all_birthdates = {
                 "victim_birthdate_combinations": victim_birthdate_combinations,
@@ -495,13 +498,19 @@ class generate_passwords:
             birthdays_combinations = self.remove_duplicates_array(birthdays_combinations)
 
             likes = self.combine_likes(profile["words"])
+            work = self.combine_likes(profile["work"])
+            cities = self.combine_likes(profile["cities"])
+            study = self.combine_likes(profile["study"])
             all_intern_info = self.from_dict_to_list(all_names)
             all_intern_info = all_intern_info + self.from_dict_to_list(all_birthdates)
+            if(profile["extra_info"]):
+                extra_info = self.combine_likes(self.prepare_extra_info(profile["extra_info"]))
+                all_intern_info = all_intern_info + extra_info
 
             if(int(op) == 1):
                 profile["level"] = self.get_level()
                 if(profile["level"] == 1):
-                    basewords = all_intern_info + likes
+                    basewords = all_intern_info + likes + work + cities + study
                 elif(profile["level"] == 2):
                     base_likes = self.generate_likes(likes)
                     all_likes = {
@@ -509,8 +518,27 @@ class generate_passwords:
                         "tile": base_likes[2],
                         "camel": likes
                     }
+                    base_works = self.generate_likes(work)
+                    all_works = {
+                        "lower": base_works[0],
+                        "tile": base_works[2],
+                        "camel": work
+                    }
+                    base_studies = self.generate_likes(study)
+                    all_studies = {
+                        "lower": base_studies[0],
+                        "tile": base_studies[2],
+                        "camel": study
+                    }
+                    base_cities = self.generate_likes(cities)
+                    all_cities = {
+                        "lower": base_cities[0],
+                        "tile": base_cities[2],
+                        "camel": cities
+                    }
 
-                    basewords = all_intern_info + self.from_dict_to_list(all_likes)
+                    basewords = all_intern_info + self.from_dict_to_list(all_likes) + self.from_dict_to_list(all_works)
+                    basewords = basewords + self.from_dict_to_list(all_studies) + self.from_dict_to_list(all_cities)
                 else:
                     names_birthdays = self.combination_names_birthdates(all_birthdates, all_names)
                     likes_birthdays = self.combination_names_birthdates(likes, all_names)
