@@ -37,7 +37,58 @@ class generate_passwords:
             print("\r\n")
 
         profile["pet"] = input("> Pet's name: ").lower()
-        profile["company"] = input("> Company name: ").lower()
+
+        try:
+            profile["work"]
+        except:
+            add = True
+            profile["work"] = []
+            while(add):
+                work = input("> Where you work or worked: ").lower()
+                if(work == ""):
+                    add = False
+                else:
+                    profile["work"].append(work)
+                    answer = input("> Do you want add other work? Y/[N]").lower()
+                    if(answer == "y"):
+                        add = True
+                    else:
+                        add = False
+
+        try:
+            profile["study"]
+        except:
+            add = True
+            profile["study"] = []
+            while(add):
+                study = input("> Where you study or studied: ").lower()
+                if(study == ""):
+                    add = False
+                else:
+                    profile["study"].append(study)
+                    answer = input("> Do you want add other school or university? Y/[N]").lower()
+                    if(answer == "y"):
+                        add = True
+                    else:
+                        add = False
+
+        try:
+            profile["cities"]
+        except:
+            add = True
+            profile["cities"] = []
+            while(add):
+                city = input("> What city are you living? ").lower()
+                if(city == ""):
+                    add = False
+                else:
+                    profile["cities"].append(city)
+                    answer = input("> Do you want add other city as your hometown? Y/[N]").lower()
+                    if(answer == "y"):
+                        add = True
+                    else:
+                        add = False
+
         print("\r\n")
 
         answer = input("> Do you want to add some extra words? Y/[N]: ").lower()
@@ -501,3 +552,18 @@ class generate_passwords:
         # Improve the scraping
         # Reduce the code
         # Separate in modules
+
+        # Name
+        #   Work
+        #   Study
+        #   City was born and living
+        # Likes
+
+        # Victim nickname
+        # Victim birthday
+        # Wife name
+        # Wife nickname
+        # Wife birthday
+        #     Kids names
+        #     Kids nicknames
+        #     Kids birthdays
