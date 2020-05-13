@@ -1,4 +1,5 @@
 import os
+from word import Word
 
 class generate_passwords:
 
@@ -208,6 +209,9 @@ class generate_passwords:
 
     def generate_birthdates_combinations(self, date):
         combinations = []
+
+        if(not date.isdigit()):
+            return combinations
 
         day = str(date[2:])
         month = str(date[2:4])
@@ -461,93 +465,76 @@ class generate_passwords:
     def __init__(self, profile):
         self.get_information(profile)
         finish = False
+
+        all_combinations = []
+
+        victim_names = self.generate_names(profile["name"], profile["victim_nickname"])
+        victim_birthdate_combinations = self.generate_birthdates_combinations(profile["victim_birthdate"])
+
+        wife_names = self.generate_names(profile["wife_name"], profile["wife_nickname"])
+        wife_birthdate_combinations = self.generate_birthdates_combinations(profile["wife_birthdate"])
+
+        kid_names = self.generate_kids_names(profile["kids"])
+        kid_birthdate_combinations = self.generate_kids_birthdays(profile["kids"])
+
+        pet_names = self.generate_names(profile["pet"], "")
+
+        all_names = {
+            "victim_names": victim_names,
+            "wife_names": wife_names,
+            "kid_names": kid_names,
+            "pet_names": pet_names
+        }
+        all_birthdates = {
+            "victim_birthdate_combinations": victim_birthdate_combinations,
+            "wife_birthdate_combinations": wife_birthdate_combinations,
+            "kid_birthdate_combinations": kid_birthdate_combinations
+        }
+        all_names = self.move_to_unique_array(all_names)
+        all_birthdates = self.move_to_unique_array(all_birthdates)
+        all_names = self.remove_duplicates(all_names)
+        all_birthdates = self.remove_duplicates(all_birthdates)
+
+        names_combinations = self.combine_intern_info(all_names)
+        birthdays_combinations = self.combine_intern_info(all_birthdates)
+        names_combinations = self.remove_duplicates_array(names_combinations)
+        birthdays_combinations = self.remove_duplicates_array(birthdays_combinations)
+
+        likes = self.combine_likes(profile["words"])
+        work = self.combine_likes(profile["work"])
+        cities = self.combine_likes(profile["cities"])
+        study = self.combine_likes(profile["study"])
+        all_intern_info = self.from_dict_to_list(all_names)
+        all_intern_info = all_intern_info + self.from_dict_to_list(all_birthdates)
+        if(profile["extra_info"]):
+            extra_info = self.combine_likes(self.prepare_extra_info(profile["extra_info"]))
+            all_intern_info = all_intern_info + extra_info
         while (not finish):
             op = self.menu()
-            all_combinations = []
-
-            victim_names = self.generate_names(profile["name"], profile["victim_nickname"])
-            victim_birthdate_combinations = self.generate_birthdates_combinations(profile["victim_birthdate"])
-
-            wife_names = self.generate_names(profile["wife_name"], profile["wife_nickname"])
-            wife_birthdate_combinations = self.generate_birthdates_combinations(profile["wife_birthdate"])
-
-            kid_names = self.generate_kids_names(profile["kids"])
-            kid_birthdate_combinations = self.generate_kids_birthdays(profile["kids"])
-
-            pet_names = self.generate_names(profile["pet"], "")
-
-            all_names = {
-                "victim_names": victim_names,
-                "wife_names": wife_names,
-                "kid_names": kid_names,
-                "pet_names": pet_names
-            }
-            all_birthdates = {
-                "victim_birthdate_combinations": victim_birthdate_combinations,
-                "wife_birthdate_combinations": wife_birthdate_combinations,
-                "kid_birthdate_combinations": kid_birthdate_combinations
-            }
-            all_names = self.move_to_unique_array(all_names)
-            all_birthdates = self.move_to_unique_array(all_birthdates)
-            all_names = self.remove_duplicates(all_names)
-            all_birthdates = self.remove_duplicates(all_birthdates)
-
-            names_combinations = self.combine_intern_info(all_names)
-            birthdays_combinations = self.combine_intern_info(all_birthdates)
-            names_combinations = self.remove_duplicates_array(names_combinations)
-            birthdays_combinations = self.remove_duplicates_array(birthdays_combinations)
-
-            likes = self.combine_likes(profile["words"])
-            work = self.combine_likes(profile["work"])
-            cities = self.combine_likes(profile["cities"])
-            study = self.combine_likes(profile["study"])
-            all_intern_info = self.from_dict_to_list(all_names)
-            all_intern_info = all_intern_info + self.from_dict_to_list(all_birthdates)
-            if(profile["extra_info"]):
-                extra_info = self.combine_likes(self.prepare_extra_info(profile["extra_info"]))
-                all_intern_info = all_intern_info + extra_info
-
             if(int(op) == 1):
                 profile["level"] = self.get_level()
                 if(profile["level"] == 1):
                     basewords = all_intern_info + likes + work + cities + study
                 elif(profile["level"] == 2):
                     base_likes = self.generate_likes(likes)
-                    all_likes = {
-                        "lower": base_likes[0],
-                        "tile": base_likes[2],
-                        "camel": likes
-                    }
+                    all_likes = Word(base_likes, likes)
                     base_works = self.generate_likes(work)
-                    all_works = {
-                        "lower": base_works[0],
-                        "tile": base_works[2],
-                        "camel": work
-                    }
+                    all_works = Word(base_works, work)
                     base_studies = self.generate_likes(study)
-                    all_studies = {
-                        "lower": base_studies[0],
-                        "tile": base_studies[2],
-                        "camel": study
-                    }
+                    all_studies = Word(base_studies, study)
                     base_cities = self.generate_likes(cities)
-                    all_cities = {
-                        "lower": base_cities[0],
-                        "tile": base_cities[2],
-                        "camel": cities
-                    }
+                    all_cities = Word(base_cities, cities)
 
-                    basewords = all_intern_info + self.from_dict_to_list(all_likes) + self.from_dict_to_list(all_works)
-                    basewords = basewords + self.from_dict_to_list(all_studies) + self.from_dict_to_list(all_cities)
+                    basewords = all_intern_info + self.from_dict_to_list(all_likes.cases) + self.from_dict_to_list(all_works.cases)
+                    basewords = basewords + self.from_dict_to_list(all_studies.cases) + self.from_dict_to_list(all_cities.cases)
                 else:
-                    names_birthdays = self.combination_names_birthdates(all_birthdates, all_names)
-                    likes_birthdays = self.combination_names_birthdates(likes, all_names)
+                    names_birthdays = self.combination_names_birthdates(birthdays_combinations, names_combinations)
+                    likes_birthdays = self.combination_names_birthdates(likes, birthdays_combinations)
                     basewords = all_intern_info + names_birthdays + likes_birthdays
 
                 basewords = self.remove_duplicates_array(basewords)
                 all_combinations = self.combine_array(basewords)
 
-                profile["spechars_validation"] = False
                 if(profile["spechars_validation"]):
                     all_combinations = self.move_to_unique_array_final(all_combinations)
                     self.write_and_replace(all_combinations)
