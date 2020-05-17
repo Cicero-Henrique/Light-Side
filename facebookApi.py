@@ -1,5 +1,5 @@
 
-from facebook_scraping import facebook_scraping as fs
+from scraping import Scraping as fs
 from backup import backup
 from generate_passwords import generate_passwords
 

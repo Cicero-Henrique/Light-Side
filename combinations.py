@@ -300,7 +300,6 @@ class Combinations:
         study = self.prepare_words(profile["study"])
         if(profile["extra_info"]):
             extra_info = self.prepare_words(self.prepare_extra_info(profile["extra_info"]))
-            all_intern_info = all_intern_info + extra_info
 
         info = {
             "names": names,
