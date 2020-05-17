@@ -139,15 +139,6 @@ class Combinations:
         combinations = info.split(",")
         return combinations
 
-    def generate_likes(self, likes):
-        combinations = []
-        combinations.append(self.combinations_cases(likes, "lower"))
-        combinations.append(self.combinations_cases(likes, "upper"))
-        combinations.append(self.combinations_cases(likes, "title"))
-        combinations.append(self.combinations_reverse(combinations))
-
-        return combinations
-
     def remove_articles(self, word):
         new_word = ''
         aux = word.split(" ")

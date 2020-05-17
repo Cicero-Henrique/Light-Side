@@ -22,7 +22,7 @@ class WordlistGenerator:
         [duplicates.append(item) for item in array if item not in duplicates]
         return duplicates
 
-    def combine_array(self, arr, spechar):
+    def combine_array(self, arr):
         combinations = []
         i = 0
         for word1 in arr:
@@ -31,7 +31,7 @@ class WordlistGenerator:
             for word2 in arr:
                 j = j + 1
                 print(str(i) + "/" + str(len(arr)) + "\t\t"+ str(j) + "/" + str(len(arr)))
-                combinations = combinations + self.generate_words_combinations(word1, word2, spechar)
+                combinations = combinations + self.generate_words_combinations(word1, word2)
 
         return combinations
 
@@ -41,30 +41,58 @@ class WordlistGenerator:
         if(spechar):
             combinations.append(first_word + second_word)
             combinations.append(second_word + first_word)
-            combinations.append(self.generate_words_combinations_with_special_chars(first_word, second_word))
+            combinations += self.generate_words_combinations_with_special_chars(first_word, second_word)
         else:
             combinations.append(first_word + second_word)
             combinations.append(second_word + first_word)
 
+        combinations = self.remove_duplicates_array(combinations)
         return combinations
 
-    def generate_words_combinations_with_special_chars(self, first_array, second_array):
+    def generate_words_combinations_with_special_chars(self, fword, sword):
         chars = ['"""', '!', '"', '#', '$', '%', '&', "'", '(', ')', '*', '+', ',', '-', '.', '/', ':',
                     ';', '<', '=', '>', '?', '@', '[', '"\"', ']', '^', '_', '`', '{', '|', '}', '~']
         combinations = []
 
-        for fword in first_array:
-            for sword in second_array:
-                for char in chars:
-                    combinations.append(fword + sword + char)
-                    combinations.append(char + fword + sword)
-                    combinations.append(fword + char + sword)
+        # for fword in first_array:
+        #     for sword in second_array:
+        for char in chars:
+            combinations.append(fword + sword + char)
+            combinations.append(char + fword + sword)
+            combinations.append(fword + char + sword)
 
-                    combinations.append(sword + fword + char)
-                    combinations.append(char + sword + fword)
-                    combinations.append(sword + char + fword)
+            combinations.append(sword + fword + char)
+            combinations.append(char + sword + fword)
+            combinations.append(sword + char + fword)
 
         return combinations
+
+    def get_level(self):
+        print("Choose the level of combinations: ")
+        print("1- Soft")
+        print("2- Intermediate")
+        print("3- Intense")
+        x = 4
+        while(int(x) > 3 or int(x) < 1):
+            x = input("What you prefer? ")
+        return int(x)
+
+    def write_and_replace(self, all_combinations):
+        f = open('wordlist.txt', 'w')
+        for word in all_combinations:
+            f.write(word + '\n')
+            f.write(self.replace_by_spec_chars(word) + '\n')
+        f.close()
+
+    def write_in_file(self, all_combinations, spechar):
+        f = open('wordlist.txt', 'w', encoding='utf8')
+        for word in all_combinations:
+            for word2 in all_combinations:
+                combinations = self.generate_words_combinations(word, word2, spechar)
+
+                for combination in combinations:
+                    f.write(combination + "\n")
+        f.close()
 
     def soft(self, profile):
         return profile["names"] + profile["birthdays"] + profile["likes"] + profile["city"] + profile["work"] + profile["study"]
@@ -82,17 +110,17 @@ class WordlistGenerator:
         likes_birthdays = self.combination_words_birthday(profile["likes"], profile["birthdays"])
         return self.soft(profile) + names_birthdays + likes_birthdays
 
-    def __init__(self, profile, op, spechar):
-        if(op == 1):
+    def __init__(self, profile, spechar):
+
+        level = self.get_level()
+        if(int(level) == 1):
             basewords = self.soft(profile)
-        elif (op == 2):
+        elif (int(level) == 2):
             basewords = self.intermediate(profile)
         else:
             basewords = self.intense(profile)
 
         basewords = self.remove_duplicates_array(basewords)
-        combinations = self.combine_array(basewords, spechar)
-        self.combinations = combinations
 
-
+        self.write_in_file(basewords, spechar)
 

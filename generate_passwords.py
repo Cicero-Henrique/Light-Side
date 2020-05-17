@@ -190,10 +190,9 @@ class generate_passwords:
         while (not finish):
             op = self.menu()
             if(op == '1'):
-                level = self.get_level()
-                teste = wg(info, level, profile["spechars_validation"])
-                combinations = teste.combinations
-                self.write_in_file(combinations)
+                wg(info,  profile["spechars_validation"])
+                # combinations = teste.combinations
+                # self.write_in_file(combinations)
 
             elif (op == '2'):
                 Validate(info)
