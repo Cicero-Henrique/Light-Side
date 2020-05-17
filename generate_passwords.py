@@ -1,5 +1,8 @@
 import os
 from word import Word
+from combinations import Combinations
+from wordlist_generator import WordlistGenerator as wg
+from validate import Validate
 
 class generate_passwords:
 
@@ -107,252 +110,6 @@ class generate_passwords:
 
         return profile
 
-    def contains_list(self, combinations):
-        for i in combinations:
-            if(type(i) is list):
-                return True
-        return False
-
-    def remove_duplicates(self, dictionary):
-
-        for key in dictionary:
-            duplicates = []
-            [duplicates.append(item) for item in dictionary[key] if item not in duplicates]
-            dictionary[key] = duplicates
-
-        return dictionary
-
-    def remove_duplicates_array(self, array):
-
-        duplicates = []
-        [duplicates.append(item) for item in array if item not in duplicates]
-        return duplicates
-
-    def move_to_unique_array(self, names):
-
-        for key in names:
-            uniqueArray = False
-            while(uniqueArray is False):
-                external_words = [x for x in names[key] if type(x) is str]
-                internal_words = [x for x in names[key] if type(x) is list]
-                final = [j for i in internal_words for j in i]
-
-                names[key] = final + external_words
-                if( self.contains_list(names[key]) is False):
-                    uniqueArray = True
-
-        return names
-
-    def combinations_cases(self, names, case):
-        combinations = []
-
-        if(case == "lower"):
-            for word in names:
-                combinations.append(str(word.lower()))
-        elif (case == "upper"):
-            for word in names:
-                combinations.append(str(word.upper()))
-        elif (case == "title"):
-            for word in names:
-                combinations.append(str(word.title()))
-        else:
-            for word in names:
-                combinations.append(str(word.lower()))
-
-            for i in range(0, len(names)):
-                for j in range(0, len(names)):
-                    combinations.append(names[i] + names[j].title())
-
-        return combinations
-
-        for i in range(0, len(names)):
-            for j in range(0, len(names)):
-                combinations.append(names[i] + names[j])
-
-        return combinations
-
-    def combinations_reverse(self, words):
-        combinations = []
-        for word in words:
-            combinations.append(word[::-1])
-
-        return combinations
-
-    def generate_kids_names(self, kids):
-        combinations = []
-        for kid in kids:
-            combinations.append(self.generate_names(kid["name"], kid["nickname"]))
-
-        return combinations
-
-    def generate_kids_birthdays(self, kids):
-        combinations = []
-        for kid in kids:
-            combinations.append(self.generate_birthdates_combinations(kid["birthdate"]))
-
-        return combinations
-
-    def generate_names(self, name, nickname):
-        names = []
-        array_names = name.split()
-        array_names.append(nickname)
-
-        for aux in array_names:
-            names.append(aux)
-        names.append(self.combinations_cases(array_names, "lower"))
-        names.append(self.combinations_cases(array_names, "upper"))
-        names.append(self.combinations_cases(array_names, "title"))
-        names.append(self.combinations_cases(array_names, "camel"))
-        names.append(self.combinations_reverse(names))
-
-        return names
-
-    def generate_birthdates_combinations(self, date):
-        combinations = []
-
-        if(not date.isdigit()):
-            return combinations
-
-        day = str(date[2:])
-        month = str(date[2:4])
-        year = str(date[:4])
-        short_year = str(year[1:])
-        if(int(date[2:]) < 10):
-            short_day = str(day[0:])
-        else:
-            short_day = day
-
-        if(int(date[2:4]) < 10):
-            short_month = str(month[0:])
-        else:
-            short_month = month
-
-        combinations.append(date)                                       # normal
-        combinations.append(day)                                        # day
-        combinations.append(month)                                      # month
-        combinations.append(year)                                       # year
-        combinations.append(date[::-1])                                 # reverse
-        combinations.append(month+day+year)                             # MMDDYYYY
-        combinations.append(day + month + short_year)                   # DDMMYY
-        combinations.append(month + day + short_year)                   # MMDDYY
-        combinations.append(short_day + short_month + short_year)       # DMYY
-        combinations.append(short_month + short_day + short_year)       # MDYY
-        combinations.append(short_day + short_month + year)             # DMYYYY
-        combinations.append(short_month + short_day + year)             # MDYYYY
-        return combinations
-
-    def combination_names_birthdates(self, birthdates, names):
-        combinations = []
-        for name in names:
-            for birthdate in birthdates:
-                combinations.append(name + birthdate)
-                combinations.append(birthdate + name)
-                if(" " in name):
-                    aux = name.split()
-                    word = ""
-                    for i in range(0, len(aux)-1):
-                        word = word + aux[i] + birthdate
-                    combinations.append(word)
-        return combinations
-
-    def prepare_extra_info(self, info):
-        combinations = []
-        combinations = info.split(",")
-        return combinations
-
-    def generate_likes(self, likes):
-        combinations = []
-        combinations.append(self.combinations_cases(likes, "lower"))
-        combinations.append(self.combinations_cases(likes, "upper"))
-        combinations.append(self.combinations_cases(likes, "title"))
-        combinations.append(self.combinations_reverse(combinations))
-
-        return combinations
-
-    def remove_articles(self, word):
-        new_word = ''
-        aux = word.split(" ")
-        if(len(aux) == 1):
-            return word.title()
-        for i in range(0, len(aux)):
-            if(aux[i] != 'a' or 'an' or 'the'):
-                if(aux[i].isdigit() == True):
-                    new_word = new_word + str(aux[i])
-                else:
-                    new_word = new_word + aux[i].title()
-
-        return new_word
-
-    def generate_words_combinations_with_special_chars(self, first_array, second_array):
-        chars = ['"""', '!', '"', '#', '$', '%', '&', "'", '(', ')', '*', '+', ',', '-', '.', '/', ':',
-                    ';', '<', '=', '>', '?', '@', '[', '"\"', ']', '^', '_', '`', '{', '|', '}', '~']
-        combinations = []
-
-        for fword in first_array:
-            for sword in second_array:
-                for char in chars:
-                    combinations.append(fword + sword + char)
-                    combinations.append(char + fword + sword)
-                    combinations.append(fword + char + sword)
-
-                    combinations.append(sword + fword + char)
-                    combinations.append(char + sword + fword)
-                    combinations.append(sword + char + fword)
-
-        return combinations
-
-    def generate_words_combinations(self, first_word, second_word):
-        combinations = []
-
-        combinations.append(first_word + second_word)
-        combinations.append(second_word + first_word)
-        # combinations.append(self.generate_words_combinations_with_special_chars(first_word, second_word))
-
-        return combinations
-
-    def combine_arrays(self, arr1, arr2):
-        combinations = []
-        for word1 in arr1:
-            for word2 in arr2:
-                combinations = combinations + self.generate_words_combinations(word1, word2)
-
-        return combinations
-
-    def combine_intern_info(self, dictionary):
-        combinations = []
-        for key1 in dictionary:
-            for key2 in dictionary:
-                combinations = combinations + self.combine_arrays(dictionary[key1], dictionary[key2])
-
-        return combinations
-
-    def combine_likes(self, array_likes):
-        combinations = []
-        for like in array_likes:
-            combinations.append(self.remove_articles(like))
-
-        return combinations
-
-    def from_dict_to_list(self, dict1):
-        unique = []
-        for arr in dict1.values():
-            unique = unique + arr
-
-        return unique
-
-    def combine_array(self, arr):
-        combinations = []
-        i = 0
-        for word1 in arr:
-            i = i + 1
-            j = 0
-            for word2 in arr:
-                j = j + 1
-                print(str(i) + "/" + str(len(arr)) + "\t\t"+ str(j) + "/" + str(len(arr)))
-                combinations = combinations + self.generate_words_combinations(word1, word2)
-
-        return combinations
-
     def write_in_file(self, all_combinations):
         f = open('wordlist.txt', 'w', encoding='utf8')
         for word in all_combinations:
@@ -412,44 +169,6 @@ class generate_passwords:
             x = input("What you prefer? ")
         return int(x)
 
-    def first_look(self, word):
-        chars = ['"""', '!', '"', '#', '$', '%', '&', "'", '(', ')', '*', '+', ',', '-', '.', '/', ':',
-                    ';', '<', '=', '>', '?', '@', '[', '"\"', ']', '^', '_', '`', '{', '|', '}', '~']
-        contains_digit = False
-        contains_spec_char = False
-        if(len(word) < 8):
-            print("Your password is weak because it's too short!")
-            return True
-
-        for character in word:
-            if character.isdigit():
-                contains_digit = True
-            if(character in chars):
-                contains_spec_char = True
-            if contains_digit and contains_spec_char:
-                break
-
-        if(not contains_digit):
-            print("Your password is weak because it not contains any number!")
-            return True
-
-        if(not contains_spec_char):
-            print("Warning! Consider using special characters.")
-
-        return False
-
-    def is_weak(self, data):
-        password = input("What is the password to validate: ")
-        weak = self.first_look(password)
-        if(not weak):
-            for word in data:
-                if word.lower() in password.lower() and word != '':
-                    weak = True
-                    print("Your password is weak, I found " + word + " in your profile.")
-                    return weak
-
-        return weak
-
     def menu(self):
         op = 4
         while op != '1' and op != '2' and op != '3':
@@ -465,100 +184,27 @@ class generate_passwords:
     def __init__(self, profile):
         self.get_information(profile)
         finish = False
+        t = Combinations(profile)
+        info = t.info
 
-        all_combinations = []
-
-        victim_names = self.generate_names(profile["name"], profile["victim_nickname"])
-        victim_birthdate_combinations = self.generate_birthdates_combinations(profile["victim_birthdate"])
-
-        wife_names = self.generate_names(profile["wife_name"], profile["wife_nickname"])
-        wife_birthdate_combinations = self.generate_birthdates_combinations(profile["wife_birthdate"])
-
-        kid_names = self.generate_kids_names(profile["kids"])
-        kid_birthdate_combinations = self.generate_kids_birthdays(profile["kids"])
-
-        pet_names = self.generate_names(profile["pet"], "")
-
-        all_names = {
-            "victim_names": victim_names,
-            "wife_names": wife_names,
-            "kid_names": kid_names,
-            "pet_names": pet_names
-        }
-        all_birthdates = {
-            "victim_birthdate_combinations": victim_birthdate_combinations,
-            "wife_birthdate_combinations": wife_birthdate_combinations,
-            "kid_birthdate_combinations": kid_birthdate_combinations
-        }
-        all_names = self.move_to_unique_array(all_names)
-        all_birthdates = self.move_to_unique_array(all_birthdates)
-        all_names = self.remove_duplicates(all_names)
-        all_birthdates = self.remove_duplicates(all_birthdates)
-
-        names_combinations = self.combine_intern_info(all_names)
-        birthdays_combinations = self.combine_intern_info(all_birthdates)
-        names_combinations = self.remove_duplicates_array(names_combinations)
-        birthdays_combinations = self.remove_duplicates_array(birthdays_combinations)
-
-        likes = self.combine_likes(profile["words"])
-        work = self.combine_likes(profile["work"])
-        cities = self.combine_likes(profile["cities"])
-        study = self.combine_likes(profile["study"])
-        all_intern_info = self.from_dict_to_list(all_names)
-        all_intern_info = all_intern_info + self.from_dict_to_list(all_birthdates)
-        if(profile["extra_info"]):
-            extra_info = self.combine_likes(self.prepare_extra_info(profile["extra_info"]))
-            all_intern_info = all_intern_info + extra_info
         while (not finish):
             op = self.menu()
-            if(int(op) == 1):
-                profile["level"] = self.get_level()
-                if(profile["level"] == 1):
-                    basewords = all_intern_info + likes + work + cities + study
-                elif(profile["level"] == 2):
-                    base_likes = self.generate_likes(likes)
-                    all_likes = Word(base_likes, likes)
-                    base_works = self.generate_likes(work)
-                    all_works = Word(base_works, work)
-                    base_studies = self.generate_likes(study)
-                    all_studies = Word(base_studies, study)
-                    base_cities = self.generate_likes(cities)
-                    all_cities = Word(base_cities, cities)
+            if(op == '1'):
+                level = self.get_level()
+                teste = wg(info, level, profile["spechars_validation"])
+                combinations = teste.combinations
+                self.write_in_file(combinations)
 
-                    basewords = all_intern_info + self.from_dict_to_list(all_likes.cases) + self.from_dict_to_list(all_works.cases)
-                    basewords = basewords + self.from_dict_to_list(all_studies.cases) + self.from_dict_to_list(all_cities.cases)
-                else:
-                    names_birthdays = self.combination_names_birthdates(birthdays_combinations, names_combinations)
-                    likes_birthdays = self.combination_names_birthdates(likes, birthdays_combinations)
-                    basewords = all_intern_info + names_birthdays + likes_birthdays
-
-                basewords = self.remove_duplicates_array(basewords)
-                all_combinations = self.combine_array(basewords)
-
-                if(profile["spechars_validation"]):
-                    all_combinations = self.move_to_unique_array_final(all_combinations)
-                    self.write_and_replace(all_combinations)
-                else:
-                    self.write_in_file(all_combinations)
-                self.write_in_file(all_combinations)
-
-            elif op == '2':
-                all_intern_info = self.remove_duplicates_array(all_intern_info)
-                want_finish = False
-                while not want_finish:
-                    if (not self.is_weak(all_intern_info)):
-                        print("Congratulations, this passwords looks fine.")
-                    op = "C"
-                    while (op.lower() != 'n' or op.lower() != 'y'):
-                        op = input("Do you want to try another password? Y/N ")
-                        if(op.lower() == 'n' or op.lower() == 'y'):
-                            break
-                    if(op.lower() == "n"):
-                        want_finish = True
+            elif (op == '2'):
+                Validate(info)
 
             else:
-                os.remove("wordlist.txt")
-                finish = True
+                try:
+                    os.remove("wordlist.txt")
+                    finish = True
+
+                except:
+                    finish = True
 
         # Show the most obvious passwords combinations. E.g.: Combinations between name and nick, name and birthdate, name and wife name, pet company
         # Hide the less obvious passwords combinations. E.g.: Combinations based in social media
