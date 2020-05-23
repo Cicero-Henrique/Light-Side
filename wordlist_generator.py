@@ -86,7 +86,10 @@ class WordlistGenerator:
 
     def write_in_file(self, all_combinations, spechar):
         f = open('wordlist.txt', 'w', encoding='utf8')
+        cont = 0
         for word in all_combinations:
+            print(str(cont) + "/" + str(len(all_combinations)))
+            cont = cont +1
             for word2 in all_combinations:
                 combinations = self.generate_words_combinations(word, word2, spechar)
 
@@ -110,9 +113,17 @@ class WordlistGenerator:
         likes_birthdays = self.combination_words_birthday(profile["likes"], profile["birthdays"])
         return self.soft(profile) + names_birthdays + likes_birthdays
 
-    def __init__(self, profile, spechar):
+    def get_spechar(self):
+        answer = input("> Do you want to add special chars at the end of words? Y/[N]: ").lower()
+        if(answer == 'y'):
+            return True
+        else:
+            return False
+
+    def __init__(self, profile):
 
         level = self.get_level()
+        spechar = self.get_spechar()
         if(int(level) == 1):
             basewords = self.soft(profile)
         elif (int(level) == 2):

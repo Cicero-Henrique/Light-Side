@@ -102,12 +102,6 @@ class generate_passwords:
         else:
             profile["extra_info"] = False
 
-        answer = input("> Do you want to add special chars at the end of words? Y/[N]: ").lower()
-        if(answer == 'y'):
-            profile["spechars_validation"] = True
-        else:
-            profile["spechars_validation"] = False
-
         return profile
 
     def write_in_file(self, all_combinations):
@@ -190,7 +184,7 @@ class generate_passwords:
         while (not finish):
             op = self.menu()
             if(op == '1'):
-                wg(info,  profile["spechars_validation"])
+                wg(info)
                 # combinations = teste.combinations
                 # self.write_in_file(combinations)
 
