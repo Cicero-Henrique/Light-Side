@@ -223,38 +223,6 @@ class Combinations:
 
         return combinations
 
-    def replace_by_spec_chars(self, word):
-        replaced = ''
-        word = word.lower()
-        if('a' in word):
-            replaced = word.replace('a', '@')
-            #combinations.append(replaced)
-        if('e' in word):
-            replaced = replaced.replace('e', '3')
-
-            # combinations.append(word.replace('e', '3'))
-            # combinations.append(replaced)
-        if('o' in word):
-            replaced = replaced.replace('o', '0')
-
-            # combinations.append(word.replace('o', '0'))
-            # combinations.append(replaced)
-        if('s' in word):
-            replaced = replaced.replace('s', '5')
-
-            # combinations.append(word.replace('s', '5'))
-            # combinations.append(replaced)
-        if('i' in word):
-            replaced = replaced.replace('i', '!')
-            # combinations.append(word.replace('i', '!'))
-            # combinations.append(replaced)
-
-            replaced = replaced.replace('!', '1')
-            # combinations.append(word.replace('!', '1'))
-            # combinations.append(replaced)
-
-        return replaced
-
     def get_info(self, info):
         return info
 

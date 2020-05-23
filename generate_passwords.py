@@ -114,13 +114,6 @@ class generate_passwords:
                 f.write(word + "\n")
         f.close()
 
-    def write_and_replace(self, all_combinations):
-        f = open('wordlist.txt', 'w')
-        for word in all_combinations:
-            f.write(word + '\n')
-            f.write(self.replace_by_spec_chars(word) + '\n')
-        f.close()
-
     def replace_by_spec_chars(self, word):
         replaced = ''
         word = word.lower()
