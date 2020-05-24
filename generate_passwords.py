@@ -6,11 +6,26 @@ from validate import Validate
 
 class generate_passwords:
 
+    def validate_date(self, date):
+        if(int(date[0:2]) > 31):
+            return False
+        if(int(date[2:4]) > 12):
+            return False
+        if(int(date[4:]) < 1900 or int(date[4:]) > 2020):
+            return False
+        if(date[2:4] == "02" and int(date[0:2]) > 29):
+            return False
+        return True
+
     def get_birthday(self):
         birthday = input("\t\t Birthday (DDMMYYYY): ")
-        while len(birthday) != 8 and birthday.isdigit():
+        if(birthday == ''):
+            return birthday
+        valid = self.validate_date(birthday)
+        while len(birthday) != 8 or not birthday.isdigit() or not valid:
             print("\r\n[-] You must enter 8 digits for birthday!")
             birthday = input("> Birthday (DDMMYYYY): ")
+            valid = self.validate_date(birthday)
         return str(birthday)
 
     def get_information(self, profile):
@@ -113,48 +128,6 @@ class generate_passwords:
             else:
                 f.write(word + "\n")
         f.close()
-
-    def replace_by_spec_chars(self, word):
-        replaced = ''
-        word = word.lower()
-        if('a' in word):
-            replaced = word.replace('a', '@')
-            #combinations.append(replaced)
-        if('e' in word):
-            replaced = replaced.replace('e', '3')
-
-            # combinations.append(word.replace('e', '3'))
-            # combinations.append(replaced)
-        if('o' in word):
-            replaced = replaced.replace('o', '0')
-
-            # combinations.append(word.replace('o', '0'))
-            # combinations.append(replaced)
-        if('s' in word):
-            replaced = replaced.replace('s', '5')
-
-            # combinations.append(word.replace('s', '5'))
-            # combinations.append(replaced)
-        if('i' in word):
-            replaced = replaced.replace('i', '!')
-            # combinations.append(word.replace('i', '!'))
-            # combinations.append(replaced)
-
-            replaced = replaced.replace('!', '1')
-            # combinations.append(word.replace('!', '1'))
-            # combinations.append(replaced)
-
-        return replaced
-
-    def get_level(self):
-        print("Choose the level of combinations: ")
-        print("1- Soft")
-        print("2- Intermediate")
-        print("3- Intense")
-        x = 4
-        while(int(x) > 3 or int(x) < 1):
-            x = input("What you prefer? ")
-        return int(x)
 
     def menu(self):
         op = 4
