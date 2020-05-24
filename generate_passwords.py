@@ -3,6 +3,7 @@ from word import Word
 from combinations import Combinations
 from wordlist_generator import WordlistGenerator as wg
 from validate import Validate
+from view import View as view
 
 class generate_passwords:
 
@@ -143,6 +144,8 @@ class generate_passwords:
 
     def __init__(self, profile):
         self.get_information(profile)
+        view.clear()
+        view.show_info(profile)
         finish = False
         t = Combinations(profile)
         info = t.info
