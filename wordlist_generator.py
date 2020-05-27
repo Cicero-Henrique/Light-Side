@@ -1,4 +1,5 @@
 from word import Word
+from view import View as view
 
 class WordlistGenerator:
 
@@ -68,6 +69,7 @@ class WordlistGenerator:
         return combinations
 
     def get_level(self):
+        view.clear()
         print("Choose the level of combinations: ")
         print("1- Soft")
         print("2- Intermediate")
@@ -77,17 +79,21 @@ class WordlistGenerator:
             x = input("What you prefer? ")
         return int(x)
 
-    def write_in_file(self, all_combinations, spechar):
+    def write_in_file(self, all_combinations, spechar, info, profile):
         f = open('wordlist.txt', 'w', encoding='utf8')
         cont = 0
+        view.clear()
+        view.show_info(profile)
         for word in all_combinations:
-            print(str(cont) + "/" + str(len(all_combinations)))
-            cont = cont +1
+            view.percentage(int(cont), int(len(all_combinations)))
+            # print(str(cont) + "/" + str(len(all_combinations)))
+            cont = cont + 1
             for word2 in all_combinations:
                 combinations = self.generate_words_combinations(word, word2, spechar)
 
                 for combination in combinations:
                     f.write(combination + "\n")
+        view.percentage(int(len(all_combinations)), int(len(all_combinations)))
         f.close()
 
     def soft(self, profile):
@@ -113,18 +119,18 @@ class WordlistGenerator:
         else:
             return False
 
-    def __init__(self, profile):
+    def __init__(self, info, profile):
 
         level = self.get_level()
         spechar = self.get_spechar()
         if(int(level) == 1):
-            basewords = self.soft(profile)
+            basewords = self.soft(info)
         elif (int(level) == 2):
-            basewords = self.intermediate(profile)
+            basewords = self.intermediate(info)
         else:
-            basewords = self.intense(profile)
+            basewords = self.intense(info)
 
         basewords = self.remove_duplicates_array(basewords)
 
-        self.write_in_file(basewords, spechar)
+        self.write_in_file(basewords, spechar, info, profile)
 

@@ -133,7 +133,7 @@ class generate_passwords:
     def menu(self):
         op = 4
         while op != '1' and op != '2' and op != '3':
-            print('\t\t MENU')
+            print('\n\t\t MENU')
             print('1- Generate wordlist')
             print('2- Validate password')
             print('3- Close')
@@ -153,7 +153,7 @@ class generate_passwords:
         while (not finish):
             op = self.menu()
             if(op == '1'):
-                wg(info)
+                wg(info, profile)
                 # combinations = teste.combinations
                 # self.write_in_file(combinations)
 
