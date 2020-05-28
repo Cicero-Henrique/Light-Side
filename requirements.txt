@@ -4,6 +4,7 @@ bs4==0.0.1
 certifi==2019.11.28
 chardet==3.0.4
 colorama==0.4.3
+console-progressbar==1.1.2
 html5lib==1.0.1
 idna==2.9
 isort==4.3.21
