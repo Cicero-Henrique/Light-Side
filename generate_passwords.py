@@ -8,6 +8,10 @@ from view import View as view
 class generate_passwords:
 
     def validate_date(self, date):
+        if(len(date) != 8):
+            return False
+        if(not date.isdigit()):
+            return False
         if(int(date[0:2]) > 31):
             return False
         if(int(date[2:4]) > 12):
@@ -23,9 +27,11 @@ class generate_passwords:
         if(birthday == ''):
             return birthday
         valid = self.validate_date(birthday)
-        while len(birthday) != 8 or not birthday.isdigit() or not valid:
+        while not valid:
             print("\r\n[-] You must enter 8 digits for birthday!")
             birthday = input("> Birthday (DDMMYYYY): ")
+            if(birthday == ''):
+                return birthday
             valid = self.validate_date(birthday)
         return str(birthday)
 
@@ -133,6 +139,7 @@ class generate_passwords:
     def menu(self):
         op = 4
         while op != '1' and op != '2' and op != '3':
+            view.clear()
             print('\n\t\t MENU')
             print('1- Generate wordlist')
             print('2- Validate password')
@@ -154,8 +161,6 @@ class generate_passwords:
             op = self.menu()
             if(op == '1'):
                 wg(info, profile)
-                # combinations = teste.combinations
-                # self.write_in_file(combinations)
 
             elif (op == '2'):
                 Validate(info)

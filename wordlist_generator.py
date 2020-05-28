@@ -75,9 +75,9 @@ class WordlistGenerator:
         print("2- Intermediate")
         print("3- Intense")
         x = 4
-        while(int(x) > 3 or int(x) < 1):
+        while(x != '1' and x != '2' and x != '3'):
             x = input("What you prefer? ")
-        return int(x)
+        return x
 
     def write_in_file(self, all_combinations, spechar, info, profile):
         f = open('wordlist.txt', 'w', encoding='utf8')
@@ -92,7 +92,8 @@ class WordlistGenerator:
                 combinations = self.generate_words_combinations(word, word2, spechar)
 
                 for combination in combinations:
-                    f.write(combination + "\n")
+                    if(len(combination) > 8 and len(combination) < 30):
+                        f.write(combination + "\n")
         view.percentage(int(len(all_combinations)), int(len(all_combinations)))
         f.close()
 
