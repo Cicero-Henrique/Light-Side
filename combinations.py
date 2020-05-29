@@ -253,12 +253,16 @@ class Combinations:
         # birthdays_combinations = self.remove_duplicates_array(birthdays_combinations)
 
 
-        likes = self.prepare_words(profile["words"])
+
         work = self.prepare_words(profile["work"])
         city = self.prepare_words(profile["cities"])
         study = self.prepare_words(profile["study"])
         if(profile["extra_info"]):
             extra_info = self.prepare_words(self.prepare_extra_info(profile["extra_info"]))
+        try:
+            likes = self.prepare_words(profile["words"])
+        except:
+            likes = []
 
         info = {
             "names": names,

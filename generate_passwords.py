@@ -3,9 +3,31 @@ from word import Word
 from combinations import Combinations
 from wordlist_generator import WordlistGenerator as wg
 from validate import Validate
+from scraping import Scraping as fs
 from view import View as view
 
 class generate_passwords:
+
+    def validate_url(self, url):
+        domain = 'https://pt-br.facebook.com/'
+        return ((url.find(domain) == 0) or url == '')
+
+    def get_URL(self):
+        valid = False
+        while(not valid):
+            print("\t the The URL must be in this format: https://pt-br.facebook.com/")
+            url = input("> Insert the URL of your Facebook: ")
+            valid = self.validate_url(url)
+        return url
+
+    def get_name(self):
+        valid = False
+        while (not valid):
+            view.clear()
+            name = input("Insert your name and surname: ")
+            if(not any(i.isdigit() for i in name) and name != ''):
+                valid = True
+        return name
 
     def validate_date(self, date):
         if(len(date) != 8):
@@ -149,7 +171,14 @@ class generate_passwords:
 
 
 
-    def __init__(self, profile):
+    def __init__(self):
+
+        url = self.get_URL()
+        profile = {}
+        if(url != ''):
+            profile = fs.scraping(url)
+        else:
+            profile["name"] = self.get_name()
         self.get_information(profile)
         view.clear()
         view.show_info(profile)
@@ -172,6 +201,9 @@ class generate_passwords:
 
                 except:
                     finish = True
+
+
+generate_passwords()
 
         # Show the most obvious passwords combinations. E.g.: Combinations between name and nick, name and birthdate, name and wife name, pet company
         # Hide the less obvious passwords combinations. E.g.: Combinations based in social media
