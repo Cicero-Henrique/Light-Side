@@ -3,7 +3,6 @@ class Word:
     def generate_word(self, words):
         combinations = []
         combinations += self.combinations_cases(words, "lower")
-        # combinations += self.combinations_cases(words, "upper")
         combinations += self.combinations_cases(words, "title")
         combinations += self.combinations_reverse(combinations)
 

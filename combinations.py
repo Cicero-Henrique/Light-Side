@@ -1,8 +1,9 @@
 class Combinations:
 
     def contains_list(self, combinations):
-        for i in combinations:
-            if(type(i) is list):
+
+        for combination in combinations:
+            if(type(combination) is list):
                 return True
         return False
 
@@ -14,12 +15,6 @@ class Combinations:
             dictionary[key] = duplicates
 
         return dictionary
-
-    def remove_duplicates_array(self, array):
-
-        duplicates = []
-        [duplicates.append(item) for item in array if item not in duplicates]
-        return duplicates
 
     def move_to_unique_array(self, names):
 
@@ -153,49 +148,6 @@ class Combinations:
 
         return new_word
 
-    def generate_words_combinations_with_special_chars(self, first_array, second_array):
-        chars = ['"""', '!', '"', '#', '$', '%', '&', "'", '(', ')', '*', '+', ',', '-', '.', '/', ':',
-                    ';', '<', '=', '>', '?', '@', '[', '"\"', ']', '^', '_', '`', '{', '|', '}', '~']
-        combinations = []
-
-        for fword in first_array:
-            for sword in second_array:
-                for char in chars:
-                    combinations.append(fword + sword + char)
-                    combinations.append(char + fword + sword)
-                    combinations.append(fword + char + sword)
-
-                    combinations.append(sword + fword + char)
-                    combinations.append(char + sword + fword)
-                    combinations.append(sword + char + fword)
-
-        return combinations
-
-    def generate_words_combinations(self, first_word, second_word):
-        combinations = []
-
-        combinations.append(first_word + second_word)
-        combinations.append(second_word + first_word)
-        # combinations.append(self.generate_words_combinations_with_special_chars(first_word, second_word))
-
-        return combinations
-
-    def combine_arrays(self, arr1, arr2):
-        combinations = []
-        for word1 in arr1:
-            for word2 in arr2:
-                combinations = combinations + self.generate_words_combinations(word1, word2)
-
-        return combinations
-
-    def combine_intern_info(self, dictionary):
-        combinations = []
-        for key1 in dictionary:
-            for key2 in dictionary:
-                combinations = combinations + self.combine_arrays(dictionary[key1], dictionary[key2])
-
-        return combinations
-
     def prepare_words(self, array_likes):
         combinations = []
         for like in array_likes:
@@ -209,19 +161,6 @@ class Combinations:
             unique = unique + arr
 
         return unique
-
-    def combine_array(self, arr):
-        combinations = []
-        i = 0
-        for word1 in arr:
-            i = i + 1
-            j = 0
-            for word2 in arr:
-                j = j + 1
-                print(str(i) + "/" + str(len(arr)) + "\t\t"+ str(j) + "/" + str(len(arr)))
-                combinations = combinations + self.generate_words_combinations(word1, word2)
-
-        return combinations
 
     def get_info(self, info):
         return info
@@ -246,13 +185,6 @@ class Combinations:
         birthdays = self.remove_duplicates(birthdays)
         names = self.from_dict_to_list(names)
         birthdays = self.from_dict_to_list(birthdays)
-
-        # names_combinations = self.combine_intern_info(names)
-        # birthdays_combinations = self.combine_intern_info(birthdays)
-        # names_combinations = self.remove_duplicates_array(names_combinations)
-        # birthdays_combinations = self.remove_duplicates_array(birthdays_combinations)
-
-
 
         work = self.prepare_words(profile["work"])
         city = self.prepare_words(profile["cities"])

@@ -6,7 +6,7 @@ from validate import Validate
 from scraping import Scraping as fs
 from view import View as view
 
-class generate_passwords:
+class main:
 
     def validate_url(self, url):
         domain = 'https://pt-br.facebook.com/'
@@ -15,6 +15,7 @@ class generate_passwords:
     def get_URL(self):
         valid = False
         while(not valid):
+            view.clear()
             print("\t the The URL must be in this format: https://pt-br.facebook.com/")
             url = input("> Insert the URL of your Facebook: ")
             valid = self.validate_url(url)
@@ -170,7 +171,6 @@ class generate_passwords:
         return op
 
 
-
     def __init__(self):
 
         url = self.get_URL()
@@ -202,28 +202,4 @@ class generate_passwords:
                 except:
                     finish = True
 
-
-generate_passwords()
-
-        # Show the most obvious passwords combinations. E.g.: Combinations between name and nick, name and birthdate, name and wife name, pet company
-        # Hide the less obvious passwords combinations. E.g.: Combinations based in social media
-
-        # Be sure that all info is being used
-        # Improve the scraping
-        # Reduce the code
-        # Separate in modules
-
-        # Name
-        #   Work
-        #   Study
-        #   City was born and living
-        # Likes
-
-        # Victim nickname
-        # Victim birthday
-        # Wife name
-        # Wife nickname
-        # Wife birthday
-        #     Kids names
-        #     Kids nicknames
-        #     Kids birthdays
+main()

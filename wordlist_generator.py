@@ -23,19 +23,6 @@ class WordlistGenerator:
         [duplicates.append(item) for item in array if item not in duplicates]
         return duplicates
 
-    def combine_array(self, arr):
-        combinations = []
-        i = 0
-        for word1 in arr:
-            i = i + 1
-            j = 0
-            for word2 in arr:
-                j = j + 1
-                print(str(i) + "/" + str(len(arr)) + "\t\t"+ str(j) + "/" + str(len(arr)))
-                combinations = combinations + self.generate_words_combinations(word1, word2)
-
-        return combinations
-
     def generate_words_combinations(self, first_word, second_word, spechar):
         combinations = []
 
@@ -55,8 +42,6 @@ class WordlistGenerator:
                     ';', '<', '=', '>', '?', '@', '[', '"\"', ']', '^', '_', '`', '{', '|', '}', '~']
         combinations = []
 
-        # for fword in first_array:
-        #     for sword in second_array:
         for char in chars:
             combinations.append(fword + sword + char)
             combinations.append(char + fword + sword)
@@ -86,7 +71,6 @@ class WordlistGenerator:
         view.show_info(profile)
         for word in all_combinations:
             view.percentage(int(cont), int(len(all_combinations)))
-            # print(str(cont) + "/" + str(len(all_combinations)))
             cont = cont + 1
             for word2 in all_combinations:
                 combinations = self.generate_words_combinations(word, word2, spechar)
