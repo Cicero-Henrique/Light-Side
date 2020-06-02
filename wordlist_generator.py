@@ -1,5 +1,5 @@
 from word import Word
-from view import View as view
+import view
 
 class WordlistGenerator:
 

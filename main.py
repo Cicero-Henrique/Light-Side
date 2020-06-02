@@ -4,7 +4,7 @@ from combinations import Combinations
 from wordlist_generator import WordlistGenerator as wg
 from validate import Validate
 from scraping import Scraping as fs
-from view import View as view
+import view
 
 class main:
 
