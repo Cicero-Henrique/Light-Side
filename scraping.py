@@ -54,19 +54,24 @@ class Scraping:
                     profile["cities"].append(cities[i].a.get_text())
 
         try:
-            table_favorites = soup.find("table", {"class": "mtm _5e7- profileInfoTable _3stp _3stn"})
-            all_favorites = table_favorites.find_all("div", {"class": "labelContainer"})
-            page_name = table_favorites.find_all("div", {"class": "mediaPageName"})
+            table_favorites = soup.find(
+                "table", {"class": "mtm _5e7- profileInfoTable _3stp _3stn"})
+            all_favorites = table_favorites.find_all(
+                "div", {"class": "labelContainer"})
+            page_name = table_favorites.find_all(
+                "div", {"class": "mediaPageName"})
 
-            for i in range(0, len(all_favorites)-1):
+            for i in range(0, len(all_favorites) - 1):
                 titles.append(all_favorites[i].get_text())
                 contents.append(page_name[i].get_text())
                 print(titles[i] + ": " + contents[i])
 
-            others_title = all_favorites[len(all_favorites) -1].get_text()
-            others_content_visible = table_favorites.find_all("span", {"class": "visible"})
+            others_title = all_favorites[len(all_favorites) - 1].get_text()
+            others_content_visible = table_favorites.find_all(
+                "span", {"class": "visible"})
             others_content_visible = others_content_visible[0].find_all("a")
-            others_content_hidden = table_favorites.find_all("span", {"class": "hiddenItem"})
+            others_content_hidden = table_favorites.find_all(
+                "span", {"class": "hiddenItem"})
             others_content_hidden = others_content_hidden[0].find_all("a")
 
             for i in range(0, len(others_content_visible)):
@@ -77,7 +82,7 @@ class Scraping:
 
             profile["words"] = favorites.sort()
 
-        except:
+        except BaseException:
             profile["words"] = []
 
         def my_range(start, end, step):

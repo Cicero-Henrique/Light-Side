@@ -3,7 +3,7 @@ class Combinations:
     def contains_list(self, combinations):
 
         for combination in combinations:
-            if(type(combination) is list):
+            if(isinstance(combination, list)):
                 return True
         return False
 
@@ -21,12 +21,12 @@ class Combinations:
         for key in names:
             uniqueArray = False
             while(uniqueArray is False):
-                external_words = [x for x in names[key] if type(x) is str]
-                internal_words = [x for x in names[key] if type(x) is list]
+                external_words = [x for x in names[key] if isinstance(x, str)]
+                internal_words = [x for x in names[key] if isinstance(x, list)]
                 final = [j for i in internal_words for j in i]
 
                 names[key] = final + external_words
-                if( self.contains_list(names[key]) is False):
+                if(self.contains_list(names[key]) is False):
                     uniqueArray = True
 
         return names
@@ -69,14 +69,16 @@ class Combinations:
     def generate_kids_names(self, kids):
         combinations = []
         for kid in kids:
-            combinations.append(self.generate_names(kid["name"], kid["nickname"]))
+            combinations.append(
+                self.generate_names(kid["name"], kid["nickname"]))
 
         return combinations
 
     def generate_kids_birthdays(self, kids):
         combinations = []
         for kid in kids:
-            combinations.append(self.generate_birthdates_combinations(kid["birthdate"]))
+            combinations.append(
+                self.generate_birthdates_combinations(kid["birthdate"]))
 
         return combinations
 
@@ -103,7 +105,7 @@ class Combinations:
 
         day = str(date[2:])
         month = str(date[2:4])
-        year = str(date[:4])
+        year = str(date[4:])
         short_year = str(year[1:])
         if(int(date[2:]) < 10):
             short_day = str(day[0:])
@@ -115,12 +117,15 @@ class Combinations:
         else:
             short_month = month
 
-        combinations.append(date)                                       # normal
+        # normal
+        combinations.append(date)
         combinations.append(day)                                        # day
         combinations.append(month)                                      # month
         combinations.append(year)                                       # year
-        combinations.append(date[::-1])                                 # reverse
-        combinations.append(month+day+year)                             # MMDDYYYY
+        # reverse
+        combinations.append(date[::-1])
+        # MMDDYYYY
+        combinations.append(month + day + year)
         combinations.append(day + month + short_year)                   # DDMMYY
         combinations.append(month + day + short_year)                   # MMDDYY
         combinations.append(short_day + short_month + short_year)       # DMYY
@@ -141,7 +146,7 @@ class Combinations:
             return word.title()
         for i in range(0, len(aux)):
             if(aux[i] != 'a' or 'an' or 'the'):
-                if(aux[i].isdigit() == True):
+                if(aux[i].isdigit()):
                     new_word = new_word + str(aux[i])
                 else:
                     new_word = new_word + aux[i].title()
@@ -177,7 +182,7 @@ class Combinations:
             "victim_birthdate_combinations": self.generate_birthdates_combinations(profile["victim_birthdate"]),
             "wife_birthdate_combinations": self.generate_birthdates_combinations(profile["wife_birthdate"]),
             "kid_birthdate_combinations": self.generate_kids_birthdays(profile["kids"])
-        }
+            }
 
         names = self.move_to_unique_array(names)
         birthdays = self.move_to_unique_array(birthdays)
@@ -190,10 +195,11 @@ class Combinations:
         city = self.prepare_words(profile["cities"])
         study = self.prepare_words(profile["study"])
         if(profile["extra_info"]):
-            extra_info = self.prepare_words(self.prepare_extra_info(profile["extra_info"]))
+            extra_info = self.prepare_words(
+                self.prepare_extra_info(profile["extra_info"]))
         try:
             likes = self.prepare_words(profile["words"])
-        except:
+        except BaseException:
             likes = []
 
         info = {

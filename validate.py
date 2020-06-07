@@ -58,4 +58,3 @@ class Validate:
                     break
             if(op.lower() == "n"):
                 want_finish = True
-
