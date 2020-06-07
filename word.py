@@ -1,41 +1,50 @@
-class Word:
+from abc import ABC, abstractmethod
 
-    def generate_word(self, words):
+class Word(ABC):
+
+    def get_lower(self, words):
         combinations = []
-        combinations += self.combinations_cases(words, "lower")
-        combinations += self.combinations_cases(words, "title")
-        combinations += self.combinations_reverse(combinations)
-
+        for word in words:
+            combinations.append(str(word.lower()))
         return combinations
 
-    def combinations_cases(self, names, case):
+    def get_upper(self, words):
         combinations = []
-
-        if(case == "lower"):
-            for word in names:
-                combinations.append(str(word.lower()))
-        elif (case == "upper"):
-            for word in names:
-                combinations.append(str(word.upper()))
-        elif (case == "title"):
-            for word in names:
-                combinations.append(str(word.title()))
-        else:
-            for word in names:
-                combinations.append(str(word.lower()))
-
-            for i in range(0, len(names)):
-                for j in range(0, len(names)):
-                    combinations.append(names[i] + names[j].title())
-
+        for word in words:
+            combinations.append(str(word.upper()))
         return combinations
 
-    def combinations_reverse(self, words):
+    def get_title(self, words):
+        combinations = []
+        for word in words:
+            combinations.append(str(word.title()))
+        return combinations
+
+    def get_camel(self, words):
+        combinations = []
+        for word in words:
+                combinations.append(str(word.lower()))
+
+        for i in range(0, len(words)):
+            for j in range(0, len(words)):
+                combinations.append(words[i] + words[j].title())
+        return combinations
+
+    def get_reverse(self, words):
         combinations = []
         for word in words:
             combinations.append(word[::-1])
 
         return combinations
 
+
+    def generate_word(self, words):
+        combinations = []
+        combinations += self.get_lower(words)
+        combinations += self.get_title(words)
+        combinations += self.get_reverse(combinations)
+
+        return combinations
+
     def __init__(self, array):
-        self.word = self.generate_word(array)
+        super().__init__()

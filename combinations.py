@@ -1,4 +1,6 @@
-class Combinations:
+from word import Word
+
+class Combinations(Word):
 
     def contains_list(self, combinations):
 
@@ -31,38 +33,13 @@ class Combinations:
 
         return names
 
-    def combinations_cases(self, names, case):
+    def combinations_cases(self, names):
         combinations = []
-
-        if(case == "lower"):
-            for word in names:
-                combinations.append(str(word.lower()))
-        elif (case == "upper"):
-            for word in names:
-                combinations.append(str(word.upper()))
-        elif (case == "title"):
-            for word in names:
-                combinations.append(str(word.title()))
-        else:
-            for word in names:
-                combinations.append(str(word.lower()))
-
-            for i in range(0, len(names)):
-                for j in range(0, len(names)):
-                    combinations.append(names[i] + names[j].title())
-
-        return combinations
-
-        for i in range(0, len(names)):
-            for j in range(0, len(names)):
-                combinations.append(names[i] + names[j])
-
-        return combinations
-
-    def combinations_reverse(self, words):
-        combinations = []
-        for word in words:
-            combinations.append(word[::-1])
+        combinations += self.get_lower(names);
+        combinations += self.get_upper(names);
+        combinations += self.get_title(names);
+        combinations += self.get_camel(names);
+        combinations += self.get_reverse(names);
 
         return combinations
 
@@ -89,12 +66,8 @@ class Combinations:
 
         for aux in array_names:
             names.append(aux)
-        names.append(self.combinations_cases(array_names, "lower"))
-        names.append(self.combinations_cases(array_names, "upper"))
-        names.append(self.combinations_cases(array_names, "title"))
-        names.append(self.combinations_cases(array_names, "camel"))
-        names.append(self.combinations_reverse(names))
 
+        names.append(self.combinations_cases(array_names))
         return names
 
     def generate_birthdates_combinations(self, date):

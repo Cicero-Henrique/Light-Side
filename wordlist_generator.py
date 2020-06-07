@@ -2,7 +2,7 @@ from word import Word
 import view
 import time
 
-class WordlistGenerator:
+class WordlistGenerator(Word):
 
     def combination_words_birthday(self, words, birthdays):
         combinations = []
@@ -90,11 +90,10 @@ class WordlistGenerator:
             profile["city"] + profile["work"] + profile["study"]
 
     def intermediate(self, profile):
-
-        works = Word(profile["work"]).word
-        likes = Word(profile["likes"]).word
-        studies = Word(profile["study"]).word
-        cities = Word(profile["city"]).word
+        works = self.generate_word(profile["work"])
+        likes = self.generate_word(profile["likes"])
+        studies = self.generate_word(profile["study"])
+        cities = self.generate_word(profile["city"])
         return profile["names"] + profile["birthdays"] + \
             likes + cities + works + studies
 
