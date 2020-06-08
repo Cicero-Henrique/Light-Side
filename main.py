@@ -151,14 +151,16 @@ def get_information(profile):
 
 
 def write_in_file(all_combinations):
-    f = open('wordlist.txt', 'w', encoding='utf8')
-    for word in all_combinations:
-        if(isinstance(word, list)):
-            for word2 in word:
-                f.write(word2 + "\n")
-        else:
-            f.write(word + "\n")
-    f.close()
+    try:
+        f = open('wordlist.txt', 'w', encoding='utf8')
+        for word in all_combinations:
+            if(isinstance(word, list)):
+                for word2 in word:
+                    f.write(word2 + "\n")
+            else:
+                f.write(word + "\n")
+    finally:
+        f.close()
 
 
 def menu():
@@ -199,7 +201,6 @@ if __name__ == "__main__":
         else:
             try:
                 os.remove("wordlist.txt")
-                finish = True
 
-            except BaseException:
+            finally:
                 finish = True

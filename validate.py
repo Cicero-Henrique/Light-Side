@@ -10,8 +10,6 @@ class Validate:
         return unique
 
     def first_look(self, word):
-        chars = ['"""', '!', '"', '#', '$', '%', '&', "'", '(', ')', '*', '+', ',', '-', '.', '/', ':',
-                    ';', '<', '=', '>', '?', '@', '[', '"\"', ']', '^', '_', '`', '{', '|', '}', '~']
         contains_digit = False
         contains_spec_char = False
         if(len(word) < 8):

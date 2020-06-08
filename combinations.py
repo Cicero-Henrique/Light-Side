@@ -36,11 +36,11 @@ class Combinations(Word):
 
     def combinations_cases(self, names):
         combinations = []
-        combinations += self.get_lower(names);
-        combinations += self.get_upper(names);
-        combinations += self.get_title(names);
-        combinations += self.get_camel(names);
-        combinations += self.get_reverse(names);
+        combinations += self.get_lower(names)
+        combinations += self.get_upper(names)
+        combinations += self.get_title(names)
+        combinations += self.get_camel(names)
+        combinations += self.get_reverse(names)
 
         return combinations
 
