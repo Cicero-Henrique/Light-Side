@@ -38,7 +38,7 @@ def validate_date(date):
         return True
     try:
         datetime.datetime.strptime(date, "%d%m%Y")
-    except:
+    except Exception:
         return False
 
     return True

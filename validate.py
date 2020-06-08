@@ -1,5 +1,6 @@
 import re
 
+
 class Validate:
 
     def from_dict_to_list(self, dict1):
@@ -40,7 +41,8 @@ class Validate:
             for word in data:
                 if word.lower() in password.lower() and word != '':
                     weak = True
-                    print("Your password is weak, I found " + word + " in your profile.")
+                    print("Your password is weak, I found " +
+                          word + " in your profile.")
                     return weak
 
         return weak

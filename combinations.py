@@ -1,6 +1,7 @@
 from word import Word
 import re
 
+
 class Combinations(Word):
 
     def contains_list(self, combinations):
@@ -14,7 +15,8 @@ class Combinations(Word):
 
         for key in dictionary:
             duplicates = []
-            [duplicates.append(item) for item in dictionary[key] if item not in duplicates]
+            [duplicates.append(item)
+             for item in dictionary[key] if item not in duplicates]
             dictionary[key] = duplicates
 
         return dictionary
@@ -155,7 +157,7 @@ class Combinations(Word):
             "victim_birthdate_combinations": self.generate_birthdates_combinations(profile["victim_birthdate"]),
             "wife_birthdate_combinations": self.generate_birthdates_combinations(profile["wife_birthdate"]),
             "kid_birthdate_combinations": self.generate_kids_birthdays(profile["kids"])
-            }
+        }
 
         names = self.move_to_unique_array(names)
         birthdays = self.move_to_unique_array(birthdays)

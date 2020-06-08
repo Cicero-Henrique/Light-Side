@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 
+
 class Word(ABC):
 
     def get_lower(self, words):
@@ -23,7 +24,7 @@ class Word(ABC):
     def get_camel(self, words):
         combinations = []
         for word in words:
-                combinations.append(str(word.lower()))
+            combinations.append(str(word.lower()))
 
         for i in range(0, len(words)):
             for j in range(0, len(words)):
@@ -36,7 +37,6 @@ class Word(ABC):
             combinations.append(word[::-1])
 
         return combinations
-
 
     def generate_word(self, words):
         combinations = []

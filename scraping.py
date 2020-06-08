@@ -90,11 +90,6 @@ class Scraping:
                 yield start
                 start += step
 
-        # for i in range(0, len(favorites)):
-        #     if(i%2 == 0):
-        #         if((i+1 < len(favorites))):
-        #             print('{0:50}  {1}'.format(favorites[i], favorites[i+1]))
-
         profile["words"] = favorites
 
         return profile

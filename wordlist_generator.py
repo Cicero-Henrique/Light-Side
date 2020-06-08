@@ -2,6 +2,7 @@ from word import Word
 import view
 import time
 
+
 class WordlistGenerator(Word):
 
     def combination_words_birthday(self, words, birthdays):
@@ -30,8 +31,7 @@ class WordlistGenerator(Word):
         if(spechar):
             combinations.append(first_word + second_word)
             combinations.append(second_word + first_word)
-            combinations += self.generate_words_combinations_with_special_chars(
-                first_word, second_word)
+            combinations += self.generate_words_combinations_with_special_chars(first_word, second_word)
         else:
             combinations.append(first_word + second_word)
             combinations.append(second_word + first_word)
@@ -41,8 +41,8 @@ class WordlistGenerator(Word):
 
     def generate_words_combinations_with_special_chars(self, fword, sword):
         chars = ['"""', '!', '"', '#', '$', '%', '&', "'", '(', ')', '*',
-            '+', ',', '-', '.', '/', ':', ';', '<', '=', '>', '?', '@', '[',
-            '"\"', ']', '^', '_', '`', '{', '|', '}', '~']
+                 '+', ',', '-', '.', '/', ':', ';', '<', '=', '>', '?', '@',
+                 '[', '"\"', ']', '^', '_', '`', '{', '|', '}', '~']
         combinations = []
 
         for char in chars:
