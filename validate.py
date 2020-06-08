@@ -1,3 +1,5 @@
+import re
+
 class Validate:
 
     def from_dict_to_list(self, dict1):
@@ -19,7 +21,7 @@ class Validate:
         for character in word:
             if character.isdigit():
                 contains_digit = True
-            if(character in chars):
+            if(not re.match('[a-zA-Z0-9]', character)):
                 contains_spec_char = True
             if contains_digit and contains_spec_char:
                 break

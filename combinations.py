@@ -1,4 +1,5 @@
 from word import Word
+import re
 
 class Combinations(Word):
 
@@ -75,13 +76,13 @@ class Combinations(Word):
 
         if(not date.isdigit()):
             return combinations
-
-        day = str(date[2:])
-        month = str(date[2:4])
-        year = str(date[4:])
-        short_year = str(year[1:])
+        date = str(date)
+        day = date[2:]
+        month = date[2:4]
+        year = date[4:]
+        short_year = year[1:]
         if(int(date[2:]) < 10):
-            short_day = str(day[0:])
+            short_day = day[0:]
         else:
             short_day = day
 
@@ -90,35 +91,33 @@ class Combinations(Word):
         else:
             short_month = month
 
-        # normal
-        combinations.append(date)
-        combinations.append(day)                                        # day
-        combinations.append(month)                                      # month
-        combinations.append(year)                                       # year
-        # reverse
-        combinations.append(date[::-1])
-        # MMDDYYYY
-        combinations.append(month + day + year)
-        combinations.append(day + month + short_year)                   # DDMMYY
-        combinations.append(month + day + short_year)                   # MMDDYY
-        combinations.append(short_day + short_month + short_year)       # DMYY
-        combinations.append(short_month + short_day + short_year)       # MDYY
-        combinations.append(short_day + short_month + year)             # DMYYYY
-        combinations.append(short_month + short_day + year)             # MDYYYY
+        combinations = [
+            date,                                       # normal
+            day,                                        # day
+            month,                                      # month
+            year,                                       # year
+            date[::-1],                                 # reverse
+            month + day + year,                         # MMDDYYYY
+            day + month + short_year,                   # DDMMYY
+            month + day + short_year,                   # MMDDYY
+            short_day + short_month + short_year,       # DMYY
+            short_month + short_day + short_year,       # MDYY
+            short_day + short_month + year,             # DMYYYY
+            short_month + short_day + year              # MDYYYY
+        ]
         return combinations
 
     def prepare_extra_info(self, info):
-        combinations = []
-        combinations = info.split(",")
-        return combinations
+        return info.split(",")
 
     def remove_articles(self, word):
         new_word = ''
         aux = word.split(" ")
+        # if(re.match('[a-z\s]*$', name)):
         if(len(aux) == 1):
             return word.title()
         for i in range(0, len(aux)):
-            if(aux[i] != 'a' or 'an' or 'the'):
+            if(not re.match(['\ba\b', '\ban\b', '\bthe\b'], aux[i])):
                 if(aux[i].isdigit()):
                     new_word = new_word + str(aux[i])
                 else:
@@ -140,6 +139,7 @@ class Combinations(Word):
 
         return unique
 
+    @property
     def get_info(self, info):
         return info
 
