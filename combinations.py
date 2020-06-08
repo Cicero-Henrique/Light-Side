@@ -115,11 +115,10 @@ class Combinations(Word):
     def remove_articles(self, word):
         new_word = ''
         aux = word.split(" ")
-        # if(re.match('[a-z\s]*$', name)):
         if(len(aux) == 1):
             return word.title()
         for i in range(0, len(aux)):
-            if(not re.match(['\ba\b', '\ban\b', '\bthe\b'], aux[i])):
+            if(aux[i] != 'a' or 'an' or 'the'):
                 if(aux[i].isdigit()):
                     new_word = new_word + str(aux[i])
                 else:
