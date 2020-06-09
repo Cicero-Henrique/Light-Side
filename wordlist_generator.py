@@ -14,16 +14,13 @@ class WordlistGenerator(Word):
                 if(" " in word):
                     aux = word.split()
                     word = ""
-                    for i in range(0, len(aux) - 1):
-                        word = word + aux[i] + birthday
+                    for i in range(len(aux) - 1):
+                        word += aux[i] + birthday
                     combinations.append(word)
         return combinations
 
     def remove_duplicates_array(self, array):
-
-        duplicates = []
-        [duplicates.append(item) for item in array if item not in duplicates]
-        return duplicates
+        return list(set(array))
 
     def generate_words_combinations(self, first_word, second_word, spechar):
         combinations = []
@@ -68,22 +65,21 @@ class WordlistGenerator(Word):
         return x
 
     def write_in_file(self, all_combinations, spechar, info, profile):
-        f = open('wordlist.txt', 'w', encoding='utf8')
-        cont = 0
-        view.clear()
-        view.show_info(profile)
-        for word in all_combinations:
-            view.percentage(int(cont), int(len(all_combinations)))
-            cont = cont + 1
-            for word2 in all_combinations:
-                combinations = self.generate_words_combinations(
-                    word, word2, spechar)
+        with open('wordlist.txt', 'w', encoding='utf8') as f:
+            cont = 0
+            view.clear()
+            view.show_info(profile)
+            for word in all_combinations:
+                view.percentage(int(cont), int(len(all_combinations)))
+                cont = cont + 1
+                for word2 in all_combinations:
+                    combinations = self.generate_words_combinations(
+                        word, word2, spechar)
 
-                for combination in combinations:
-                    if(len(combination) > 8 and len(combination) < 30):
-                        f.write(combination + "\n")
-        view.percentage(int(len(all_combinations)), int(len(all_combinations)))
-        f.close()
+                    for combination in combinations:
+                        if(len(combination) > 8 and len(combination) < 30):
+                            f.write(combination + "\n")
+            view.percentage(int(len(all_combinations)), int(len(all_combinations)))
 
     def soft(self, profile):
         return profile["names"] + profile["birthdays"] + profile["likes"] + \
@@ -105,12 +101,9 @@ class WordlistGenerator(Word):
         return self.soft(profile) + names_birthdays + likes_birthdays
 
     def get_spechar(self):
-        answer = input(
-            "> Do you want to add special chars at the end of words? Y/[N]: ").lower()
-        if(answer == 'y'):
-            return True
-        else:
-            return False
+        return input(
+            "> Do you want to add special chars at the end of words? Y/[N]: "
+        ).lower() == 'y'
 
     def stopWatch(self, value):
         '''From seconds to days;hours:minutes;seconds'''

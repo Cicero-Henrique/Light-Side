@@ -3,28 +3,23 @@ from abc import ABC, abstractmethod
 
 class Word(ABC):
 
+    def _map(self, words, mapper):
+        return [mapper(word) for word in words]
+
+    def _map_builtin_str(self, words, function_name):
+        return self._map(words, lambda w: getattr(w, function_name)())
+
     def get_lower(self, words):
-        combinations = []
-        for word in words:
-            combinations.append(str(word.lower()))
-        return combinations
+        return self._map_builtin_str(words, 'lower')
 
     def get_upper(self, words):
-        combinations = []
-        for word in words:
-            combinations.append(str(word.upper()))
-        return combinations
+        return self._map_builtin_str(words, 'upper')
 
     def get_title(self, words):
-        combinations = []
-        for word in words:
-            combinations.append(str(word.title()))
-        return combinations
+        return self._map_builtin_str(words, 'title')
 
     def get_camel(self, words):
-        combinations = []
-        for word in words:
-            combinations.append(str(word.lower()))
+        combinations = self.get_lower(words)
 
         for i in range(0, len(words)):
             for j in range(0, len(words)):
@@ -32,19 +27,11 @@ class Word(ABC):
         return combinations
 
     def get_reverse(self, words):
-        combinations = []
-        for word in words:
-            combinations.append(word[::-1])
-
-        return combinations
+        return self._map(words, lambda w: w[::-1])
 
     def generate_word(self, words):
-        combinations = []
-        combinations += self.get_lower(words)
-        combinations += self.get_title(words)
-        combinations += self.get_reverse(combinations)
+        combinations = self.get_lower(words) + self.get_title(words)
+        return combinations + self.get_reverse(combinations)
 
-        return combinations
-
-    def __init__(self, array):
+    def __init__(self):
         super().__init__()

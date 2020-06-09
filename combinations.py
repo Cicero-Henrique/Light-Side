@@ -12,27 +12,18 @@ class Combinations(Word):
         return False
 
     def remove_duplicates(self, dictionary):
-
-        for key in dictionary:
-            duplicates = []
-            [duplicates.append(item)
-             for item in dictionary[key] if item not in duplicates]
-            dictionary[key] = duplicates
-
-        return dictionary
+        return {key: list(set(values)) for key, values in dictionary.items()}
 
     def move_to_unique_array(self, names):
-
         for key in names:
             uniqueArray = False
-            while(uniqueArray is False):
+            while not uniqueArray:
                 external_words = [x for x in names[key] if isinstance(x, str)]
                 internal_words = [x for x in names[key] if isinstance(x, list)]
                 final = [j for i in internal_words for j in i]
 
                 names[key] = final + external_words
-                if(self.contains_list(names[key]) is False):
-                    uniqueArray = True
+                uniqueArray = not self.contains_list(names[key])
 
         return names
 
@@ -176,7 +167,7 @@ class Combinations(Word):
         except BaseException:
             likes = []
 
-        info = {
+        self.info = {
             "names": names,
             "birthdays": birthdays,
             "likes": likes,
@@ -184,4 +175,3 @@ class Combinations(Word):
             "work": work,
             "study": study
         }
-        self.info = info

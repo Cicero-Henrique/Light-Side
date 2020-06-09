@@ -2,7 +2,7 @@ import os
 from combinations import Combinations
 from wordlist_generator import WordlistGenerator as wg
 from validate import Validate
-from scraping import Scraping as fs
+import scraping as fs
 import view
 import datetime
 import re
@@ -54,6 +54,16 @@ def get_birthday():
     return str(birthday)
 
 
+def request_data(question1, question2):
+    r = []
+    while True:
+        ans = input(question1).lower()
+        if ans:     # not empty
+            r.append(ans)
+            if input(question2).lower() != 'y':
+                return r
+
+
 def get_information(profile):
 
     profile["victim_nickname"] = input("\t\t Nickname: ").lower()
@@ -83,59 +93,17 @@ def get_information(profile):
 
     profile["pet"] = input("> Pet's name: ").lower()
 
-    try:
-        profile["work"]
-    except BaseException:
-        add = True
-        profile["work"] = []
-        while(add):
-            work = input("> Where you work or worked: ").lower()
-            if(work == ""):
-                add = False
-            else:
-                profile["work"].append(work)
-                answer = input(
-                    "> Do you want to add another work? Y/[N] ").lower()
-                if(answer == "y"):
-                    add = True
-                else:
-                    add = False
+    if 'work' not in profile:
+        profile['work'] = request_data("> Where you work or worked: ",
+                                       "> Do you want to add another work? Y/[N] ")
 
-    try:
-        profile["study"]
-    except BaseException:
-        add = True
-        profile["study"] = []
-        while(add):
-            study = input("> Where you study or studied: ").lower()
-            if(study == ""):
-                add = False
-            else:
-                profile["study"].append(study)
-                answer = input(
-                    "> Do you want to add another school or university? Y/[N] ").lower()
-                if(answer == "y"):
-                    add = True
-                else:
-                    add = False
+    if 'study' not in profile:
+        profile['study'] = request_data("> Where you study or studied: ",
+                                        "> Do you want to add another school or university? Y/[N] ")
 
-    try:
-        profile["cities"]
-    except BaseException:
-        add = True
-        profile["cities"] = []
-        while(add):
-            city = input("> What city are you living? ").lower()
-            if(city == ""):
-                add = False
-            else:
-                profile["cities"].append(city)
-                answer = input(
-                    "> Do you want to add another city as your hometown? Y/[N] ").lower()
-                if(answer == "y"):
-                    add = True
-                else:
-                    add = False
+    if 'cities' not in profile:
+        profile['cities'] = request_data("> What city are you living? "
+                                         "> Do you want to add another city as your hometown? Y/[N] ")
 
     print("\r\n")
 
@@ -151,16 +119,13 @@ def get_information(profile):
 
 
 def write_in_file(all_combinations):
-    try:
-        f = open('wordlist.txt', 'w', encoding='utf8')
+    with open('wordlist.txt', 'w', encoding='utf8') as f:
         for word in all_combinations:
             if(isinstance(word, list)):
                 for word2 in word:
                     f.write(word2 + "\n")
             else:
                 f.write(word + "\n")
-    finally:
-        f.close()
 
 
 def menu():
