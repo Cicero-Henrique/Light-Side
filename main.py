@@ -10,15 +10,17 @@ import re
 
 def validate_url(url):
     domain = 'https://pt-br.facebook.com/'
+    if(not ((url.find(domain) == 0) or url == '')):
+        view.clear()
+        print("\t The URL must be in this format: https://pt-br.facebook.com/")
     return ((url.find(domain) == 0) or url == '')
 
 
 def get_URL():
     valid = False
+    view.clear()
     while(not valid):
-        view.clear()
-        print("\t the The URL must be in this format: https://pt-br.facebook.com/")
-        url = input("> Insert the URL of your Facebook: ")
+        url = input("> Insert the URL of your Facebook or press Enter to skip: ")
         valid = validate_url(url)
     return url
 
@@ -28,7 +30,7 @@ def get_name():
     while (not valid):
         view.clear()
         name = input("Insert your name and surname: ")
-        if(re.match('[a-z\s]*$', name)):
+        if(re.match('[a-zA-Z\s]*$', name)):
             valid = True
     return name
 
@@ -102,7 +104,7 @@ def get_information(profile):
                                         "> Do you want to add another school or university? Y/[N] ")
 
     if 'cities' not in profile:
-        profile['cities'] = request_data("> What city are you living? "
+        profile['cities'] = request_data("> What city are you living? ",
                                          "> Do you want to add another city as your hometown? Y/[N] ")
 
     print("\r\n")
@@ -132,6 +134,7 @@ def menu():
     op = 4
     while op != '1' and op != '2' and op != '3':
         # view.clear()
+        # view.show_info(profile)
         print('\n\t\t MENU')
         print('1- Generate wordlist')
         print('2- Validate password')

@@ -1,4 +1,5 @@
 import re
+import view
 
 
 class Validate:
@@ -51,6 +52,7 @@ class Validate:
         profile = self.from_dict_to_list(profile)
         want_finish = False
         while not want_finish:
+            view.clear()
             if (not self.is_weak(profile)):
                 print("Congratulations, this passwords looks fine.")
             op = "C"
