@@ -133,7 +133,8 @@ def write_in_file(all_combinations):
 def menu():
     op = 4
     while op != '1' and op != '2' and op != '3':
-        # view.clear()
+        view.clear()
+        view.logo()
         # view.show_info(profile)
         print('\n\t\t MENU')
         print('1- Generate wordlist')

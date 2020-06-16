@@ -41,3 +41,12 @@ def percentage(now, total):
     pb = ProgressBar(total=100, prefix='Here', decimals=2,
                      length=50, fill='#', zfill='-')
     pb.print_progress_bar(value)
+
+
+def logo():
+    print(" _       _    ____  _   _ _____      ____  _  _____    ______")
+    print("| ▐     | ▐ / ___▐ | | | ▐_   _▐    /  __▐| ▐|  ,_ ²Çd|   ___▐")
+    print("| ▐     | ▐| ▐     | |_| ▐ | ▐      |  \  | ▐|  | |  ▐|  ▐__")
+    print("| ▐     | ▐| ▐   _ |  _  ▐ | ▐       \  \ | ▐|  | |  ▐|  ___▐")
+    print("| ▐____ | ▐| \__| ▐| |▐| ▐ | ▐       _/  ▐| ▐|  |_|  ▐| ▐____")
+    print("|______▐|_▐'\_____▐|_|▐|_▐ |_▐      |___/ |_▐|$;;;;çâ╜|______▐")
