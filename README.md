@@ -30,6 +30,6 @@ Finishing, the user could insert any password and if it is in the wordlist that 
 
 # Requirements
 
-* [Python 3.7+] (https://www.python.org/downloads/)
-* [Python pip] (https://pip.pypa.io/en/stable/installing/)
-* [Virtualenv] (https://virtualenv.pypa.io/en/latest/)
+* [Python 3.7+](https://www.python.org/downloads/)
+* [Python pip](https://pip.pypa.io/en/stable/installing/)
+* [Virtualenv](https://virtualenv.pypa.io/en/latest/)
