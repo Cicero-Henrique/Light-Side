@@ -159,6 +159,7 @@ class Combinations(Word):
         work = self.prepare_words(profile["work"])
         city = self.prepare_words(profile["cities"])
         study = self.prepare_words(profile["study"])
+        extra_info = []
         if(profile["extra_info"]):
             extra_info = self.prepare_words(
                 self.prepare_extra_info(profile["extra_info"]))
@@ -173,5 +174,6 @@ class Combinations(Word):
             "likes": likes,
             "city": city,
             "work": work,
+            "extra_info": extra_info,
             "study": study
         }

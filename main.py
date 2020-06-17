@@ -18,7 +18,6 @@ def validate_url(url):
 
 def get_URL():
     valid = False
-    view.clear()
     while(not valid):
         url = input("> Insert the URL of your Facebook or press Enter to skip: ")
         valid = validate_url(url)
@@ -29,6 +28,7 @@ def get_name():
     valid = False
     while (not valid):
         view.clear()
+        view.logo()
         name = input("Insert your name and surname: ")
         if(re.match('[a-zA-Z\s]*$', name)):
             valid = True
@@ -130,12 +130,12 @@ def write_in_file(all_combinations):
                 f.write(word + "\n")
 
 
-def menu():
+def menu(message):
     op = 4
     while op != '1' and op != '2' and op != '3':
         view.clear()
         view.logo()
-        # view.show_info(profile)
+        print(message)
         print('\n\t\t MENU')
         print('1- Generate wordlist')
         print('2- Validate password')
@@ -146,6 +146,8 @@ def menu():
 
 if __name__ == "__main__":
 
+    view.clear()
+    view.logo()
     url = get_URL()
     profile = {}
     if(url != ''):
@@ -158,18 +160,21 @@ if __name__ == "__main__":
     finish = False
     t = Combinations(profile)
     info = t.info
+    op = menu('')
 
     while (not finish):
-        op = menu()
         if(op == '1'):
             wg(info, profile)
+            message = 'Your wordlist is ready, the file is wordlist.txt'
+            op = menu(message)
 
         elif (op == '2'):
             Validate(info)
+            op = menu('')
 
         else:
             try:
                 os.remove("wordlist.txt")
 
-            finally:
+            except Exception:
                 finish = True

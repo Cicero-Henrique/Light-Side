@@ -1,6 +1,5 @@
 from word import Word
 import view
-import time
 
 
 class WordlistGenerator(Word):
@@ -55,6 +54,7 @@ class WordlistGenerator(Word):
 
     def get_level(self):
         view.clear()
+        view.logo()
         print("Choose the level of combinations: ")
         print("1- Soft")
         print("2- Intermediate")
@@ -105,25 +105,7 @@ class WordlistGenerator(Word):
             "> Do you want to add special chars at the end of words? Y/[N]: "
         ).lower() == 'y'
 
-    def stopWatch(self, value):
-        '''From seconds to days;hours:minutes;seconds'''
-
-        valueD = (((value / 365) / 24) / 60)
-        days = int(valueD)
-
-        valueH = (valueD - days) * 365
-        hours = int(valueH)
-
-        valueM = (valueH - hours) * 24
-        minutes = int(valueM)
-
-        valueS = (valueM - minutes) * 60
-        seconds = int(valueS)
-
-        print(days, ";", hours, ":", minutes, ";", seconds)
-
     def __init__(self, info, profile):
-
         level = self.get_level()
         spechar = self.get_spechar()
         if(int(level) == 1):
@@ -134,7 +116,4 @@ class WordlistGenerator(Word):
             basewords = self.intense(info)
 
         basewords = self.remove_duplicates_array(basewords)
-        start = time.time()
         self.write_in_file(basewords, spechar, info, profile)
-        end = time.time()
-        self.stopWatch(end - start)
