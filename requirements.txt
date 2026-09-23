@@ -6,7 +6,7 @@ chardet==5.2.0
 colorama==0.4.6
 console-progressbar==1.1.2
 html5lib==1.1
-idna==3.7
+idna==3.15
 isort==5.13.2
 lazy-object-proxy==1.10.0
 mccabe==0.7.0
@@ -16,10 +16,10 @@ pandas>=2.2.2
 pylint==3.2.6
 python-dateutil==2.9.0
 pytz==2024.1
-requests==2.32.4
+requests==2.33.0
 six==1.16.0
-soupsieve==2.5
+soupsieve==2.9
 typed-ast==1.5.5
-urllib3==2.6.0
+urllib3==2.7.0
 webencodings==0.5.1
 wrapt==1.16.0
